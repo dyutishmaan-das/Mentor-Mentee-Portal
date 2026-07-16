@@ -33,3 +33,25 @@ Run `npm run build`, set `NODE_ENV=production`, and then `npm start`. The Expres
 On an empty database, the application displays a one-time setup form. After the first administrator is created, all other accounts are managed from the Users and Students modules.
 
 # Mentor-Mentee
+
+## Modular architecture
+
+The codebase is organized by responsibility so each section can be changed independently:
+
+```text
+client/src/
+  app/            Application shell and root component
+  components/     Shared UI and student components
+  constants/      Shared UI classes and record categories
+  features/       Feature-specific flows such as authentication
+  pages/          One module per dashboard section
+  utils/          Formatting and error helpers
+
+server/src/
+  config/         Database configuration
+  controllers/    Business logic grouped by feature
+  middleware/     Authentication, authorization and errors
+  models/         One Mongoose model per file
+  routes/         One route module per API section
+  utils/          Shared backend helpers
+```
