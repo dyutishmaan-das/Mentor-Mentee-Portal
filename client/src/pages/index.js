@@ -1,0 +1,9 @@
+export { default as DashboardPage } from "./DashboardPage";
+export { default as StudentsPage } from "./StudentsPage";
+export { default as SessionsPage } from "./SessionsPage";
+export { default as AcademicsPage } from "./AcademicsPage";
+export { default as RecordsPage } from "./RecordsPage";
+export { default as AssessmentsPage } from "./AssessmentsPage";
+export { default as ReportsPage } from "./ReportsPage";
+export { default as UsersPage } from "./UsersPage";
+export { default as SettingsPage } from "./SettingsPage";

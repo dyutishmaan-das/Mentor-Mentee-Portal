@@ -1,0 +1,11 @@
+import { Router } from "express";
+import { listSessions, createSession, updateSession, deleteSession } from "../controllers/sessionController.js";
+import { authenticate, authorize } from "../middleware/auth.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+const router = Router();
+router.use(authenticate);
+router.get("/", asyncHandler(listSessions));
+router.post("/", authorize("admin", "hod", "mentor"), asyncHandler(createSession));
+router.patch("/:id", authorize("admin", "hod", "mentor"), asyncHandler(updateSession));
+router.delete("/:id", authorize("admin", "hod", "mentor"), asyncHandler(deleteSession));
+export default router;

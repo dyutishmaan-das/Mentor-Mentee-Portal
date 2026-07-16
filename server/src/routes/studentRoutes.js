@@ -1,0 +1,12 @@
+import { Router } from "express";
+import { listStudents, createStudent, getStudent, updateStudent, deleteStudent } from "../controllers/studentController.js";
+import { authenticate, authorize } from "../middleware/auth.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+const router = Router();
+router.use(authenticate);
+router.get("/", asyncHandler(listStudents));
+router.post("/", authorize("admin", "hod"), asyncHandler(createStudent));
+router.get("/:id", asyncHandler(getStudent));
+router.patch("/:id", asyncHandler(updateStudent));
+router.delete("/:id", authorize("admin"), asyncHandler(deleteStudent));
+export default router;

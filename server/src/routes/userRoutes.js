@@ -1,0 +1,10 @@
+import { Router } from "express";
+import { listUsers, createUser, updateUser } from "../controllers/userController.js";
+import { authenticate, authorize } from "../middleware/auth.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+const router = Router();
+router.use(authenticate);
+router.get("/", authorize("admin", "hod"), asyncHandler(listUsers));
+router.post("/", authorize("admin"), asyncHandler(createUser));
+router.patch("/:id", authorize("admin"), asyncHandler(updateUser));
+export default router;
