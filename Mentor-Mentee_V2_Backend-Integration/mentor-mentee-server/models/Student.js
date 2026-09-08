@@ -237,10 +237,6 @@ const studentSchema = new mongoose.Schema(
             photosUploaded: [String], // Array of photo types: ['studentPhoto', 'fatherPhoto', etc.]
         }],
 
-        // ============ Profile Completion Status ============
-        profileCompleted: { type: Boolean, default: false },
-        profileCompletedAt: { type: Date },
-
         // ============ Semester academics (the critical nested map) ============
         // Stored as a plain Map so keys can be "Sem 1" … "Sem 8".
         academics: {

@@ -206,6 +206,21 @@ export async function updateStudent(req, res, next) {
 
         // Apply remaining fields
         Object.assign(student, updateData);
+
+        // Automatically set profileCompleted if key profile fields are populated and not explicitly marked false
+        if (
+            updateData.profileCompleted === true ||
+            (updateData.profileCompleted !== false &&
+             student.parentFatherName &&
+             student.parentMotherName &&
+             (student.addressPresent || student.addressPermanent))
+        ) {
+            student.profileCompleted = true;
+            if (!student.profileCompletedAt) {
+                student.profileCompletedAt = new Date();
+            }
+        }
+
         await student.save();
 
         return res.json({
