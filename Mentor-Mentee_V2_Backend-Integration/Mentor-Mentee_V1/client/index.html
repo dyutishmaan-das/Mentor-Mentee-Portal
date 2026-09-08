@@ -30,7 +30,7 @@
             <!-- Login Form -->
             <form id="login-form">
                 <div class="form-group">
-                    <label for="login-id">Official Email or Roll No</label>
+                    <label for="login-id">Official Email or Roll No <span class="req-star">*</span></label>
                     <div class="input-wrapper">
                         <span class="input-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="login-password">Password</label>
+                    <label for="login-password">Password <span class="req-star">*</span></label>
                     <div class="input-wrapper">
                         <span class="input-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -316,26 +316,26 @@
                                 <input type="text" id="student-id-field" class="form-control" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Full Name</label>
+                                <label>Full Name <span class="req-star">*</span></label>
                                 <input type="text" id="student-name" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Official College Email</label>
+                                <label>Official College Email <span class="req-star">*</span></label>
                                 <input type="email" id="student-email" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Date of Birth</label>
+                                <label>Date of Birth <span class="req-star">*</span></label>
                                 <input type="date" id="student-dob" class="form-control" required>
                             </div>
                         </div>
 
                         <div class="form-grid dense">
                             <div class="form-group">
-                                <label>Category</label>
+                                <label>Category <span class="req-star">*</span></label>
                                 <select id="student-category" class="form-control" required></select>
                             </div>
                             <div class="form-group">
-                                <label>Blood Group</label>
+                                <label>Blood Group <span class="req-star">*</span></label>
                                 <select id="student-blood" class="form-control" required></select>
                             </div>
                             <div class="form-group">
@@ -384,7 +384,7 @@
 
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Mobile Number 1</label>
+                                <label>Mobile Number 1 <span class="req-star">*</span></label>
                                 <input type="text" id="student-phone1" class="form-control" required>
                             </div>
                             <div class="form-group">
@@ -399,12 +399,12 @@
 
                         <div class="form-grid">
                             <div class="form-group form-group-full">
-                                <label>Present Address</label>
+                                <label>Present Address <span class="req-star">*</span></label>
                                 <textarea id="student-addr-present" class="form-control" style="height: 60px;"
                                     required></textarea>
                             </div>
                             <div class="form-group form-group-full">
-                                <label>Permanent Address</label>
+                                <label>Permanent Address <span class="req-star">*</span></label>
                                 <textarea id="student-addr-perm" class="form-control" style="height: 60px;"
                                     required></textarea>
                             </div>
@@ -418,11 +418,11 @@
                             <div>
                                 <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Father</h4>
                                 <div class="form-group">
-                                    <label>Father's Name</label>
+                                    <label>Father's Name <span class="req-star">*</span></label>
                                     <input type="text" id="parent-father-name" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Father Mobile 1</label>
+                                    <label>Father Mobile 1 <span class="req-star">*</span></label>
                                     <input type="text" id="parent-father-phone1" class="form-control" required>
                                 </div>
                                 <div class="form-group">
@@ -441,11 +441,11 @@
                             <div>
                                 <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Mother</h4>
                                 <div class="form-group">
-                                    <label>Mother's Name</label>
+                                    <label>Mother's Name <span class="req-star">*</span></label>
                                     <input type="text" id="parent-mother-name" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Mother Mobile 1</label>
+                                    <label>Mother Mobile 1 <span class="req-star">*</span></label>
                                     <input type="text" id="parent-mother-phone1" class="form-control" required>
                                 </div>
                                 <div class="form-group">
@@ -504,17 +504,17 @@
                             <div>
                                 <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Class 10th</h4>
                                 <div class="form-group">
-                                    <label>School / College Name</label>
+                                    <label>School / College Name <span class="req-star">*</span></label>
                                     <input type="text" id="pre-10-school" class="form-control" required>
                                 </div>
                                 <div class="form-grid dense">
                                     <div class="form-group">
-                                        <label>Passing Year</label>
+                                        <label>Passing Year <span class="req-star">*</span></label>
                                         <input type="text" id="pre-10-year" class="form-control" placeholder="2021"
                                             required>
                                     </div>
                                     <div class="form-group">
-                                        <label>Board</label>
+                                        <label>Board <span class="req-star">*</span></label>
                                         <input type="text" id="pre-10-board" class="form-control" placeholder="CBSE"
                                             required>
                                     </div>
@@ -529,7 +529,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Percentage / CGPA</label>
+                                        <label>Percentage / CGPA <span class="req-star">*</span></label>
                                         <input type="text" id="pre-10-marks" class="form-control" required>
                                     </div>
                                 </div>
@@ -537,17 +537,17 @@
                             <div>
                                 <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Class 12th / Diploma</h4>
                                 <div class="form-group">
-                                    <label>School / College Name</label>
+                                    <label>School / College Name <span class="req-star">*</span></label>
                                     <input type="text" id="pre-12-school" class="form-control" required>
                                 </div>
                                 <div class="form-grid dense">
                                     <div class="form-group">
-                                        <label>Passing Year</label>
+                                        <label>Passing Year <span class="req-star">*</span></label>
                                         <input type="text" id="pre-12-year" class="form-control" placeholder="2023"
                                             required>
                                     </div>
                                     <div class="form-group">
-                                        <label>Board</label>
+                                        <label>Board <span class="req-star">*</span></label>
                                         <input type="text" id="pre-12-board" class="form-control" placeholder="CBSE"
                                             required>
                                     </div>
@@ -562,7 +562,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Percentage / CGPA</label>
+                                        <label>Percentage / CGPA <span class="req-star">*</span></label>
                                         <input type="text" id="pre-12-marks" class="form-control" required>
                                     </div>
                                 </div>
@@ -981,15 +981,15 @@
                     <form id="mentor-add-session-form">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Select Assigned Mentee</label>
+                                <label>Select Assigned Mentee <span class="req-star">*</span></label>
                                 <select id="sess-student-select" class="form-control" required></select>
                             </div>
                             <div class="form-group">
-                                <label>Date</label>
+                                <label>Date <span class="req-star">*</span></label>
                                 <input type="date" id="sess-date" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Time</label>
+                                <label>Time <span class="req-star">*</span></label>
                                 <input type="time" id="sess-time" class="form-control" required>
                             </div>
                         </div>
@@ -1003,14 +1003,14 @@
                                 </select>
                             </div>
                             <div class="form-group" style="grid-column: span 2;">
-                                <label>Agenda</label>
+                                <label>Agenda <span class="req-star">*</span></label>
                                 <input type="text" id="sess-agenda" class="form-control"
                                     placeholder="e.g. Midterm performance review" required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Discussion Notes</label>
+                            <label>Discussion Notes <span class="req-star">*</span></label>
                             <textarea id="sess-notes" class="form-control" style="height: 100px;"
                                 placeholder="Write observations or notes on student concerns..." required></textarea>
                         </div>
@@ -1036,31 +1036,31 @@
                     <form id="mentor-profile-edit-form">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Mentor Name</label>
+                                <label>Mentor Name <span class="req-star">*</span></label>
                                 <input type="text" id="m-profile-name" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Email Address</label>
+                                <label>Email Address <span class="req-star">*</span></label>
                                 <input type="email" id="m-profile-email" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Designation</label>
+                                <label>Designation <span class="req-star">*</span></label>
                                 <input type="text" id="m-profile-designation" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Department</label>
+                                <label>Department <span class="req-star">*</span></label>
                                 <input type="text" id="m-profile-dept" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label>Contact Number</label>
+                                <label>Contact Number <span class="req-star">*</span></label>
                                 <input type="text" id="m-profile-phone" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Mentorship Period</label>
+                                <label>Mentorship Period <span class="req-star">*</span></label>
                                 <input type="text" id="m-profile-period" class="form-control"
                                     placeholder="e.g. 2023-Present" required>
                             </div>
@@ -1157,16 +1157,16 @@
                         <form id="admin-add-marks-form">
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label>Select Semester</label>
+                                    <label>Select Semester <span class="req-star">*</span></label>
                                     <select id="marks-sem-select" class="form-control" required></select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Subject Code</label>
+                                    <label>Subject Code <span class="req-star">*</span></label>
                                     <input type="text" id="marks-sub-code" class="form-control"
                                         placeholder="e.g. TCS601" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Subject Name</label>
+                                    <label>Subject Name <span class="req-star">*</span></label>
                                     <input type="text" id="marks-sub-name" class="form-control"
                                         placeholder="Compiler Design" required>
                                 </div>
@@ -1240,7 +1240,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Subject Code</label>
+                                        <label>Subject Code <span class="req-star">*</span></label>
                                         <input type="text" id="backlog-sub-code" class="form-control"
                                             placeholder="TCS301" required>
                                     </div>
@@ -1258,17 +1258,17 @@
                             <form id="admin-add-adverse-form">
                                 <div class="form-grid">
                                     <div class="form-group">
-                                        <label>Date</label>
+                                        <label>Date <span class="req-star">*</span></label>
                                         <input type="date" id="adverse-date" class="form-control" required>
                                     </div>
                                     <div class="form-group">
-                                        <label>Outcome</label>
+                                        <label>Outcome <span class="req-star">*</span></label>
                                         <input type="text" id="adverse-outcome" class="form-control"
                                             placeholder="Suspended / Warning letter issued" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Incident Details</label>
+                                    <label>Incident Details <span class="req-star">*</span></label>
                                     <textarea id="adverse-details" class="form-control" style="height: 60px;"
                                         placeholder="Write specific details..." required></textarea>
                                 </div>
@@ -1344,12 +1344,12 @@
                     <form id="form-faculty-marks">
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="fac-subject-code">Subject Code</label>
+                                <label for="fac-subject-code">Subject Code <span class="req-star">*</span></label>
                                 <input type="text" id="fac-subject-code" class="form-control" placeholder="e.g. TCS601"
                                     required>
                             </div>
                             <div class="form-group">
-                                <label for="fac-subject-name">Subject Name</label>
+                                <label for="fac-subject-name">Subject Name <span class="req-star">*</span></label>
                                 <input type="text" id="fac-subject-name" class="form-control"
                                     placeholder="e.g. Compiler Design" required>
                             </div>
@@ -1706,12 +1706,12 @@
             </div>
             <form id="form-add-hobby">
                 <div class="form-group">
-                    <label for="add-hobby-name">Hobby Name</label>
+                    <label for="add-hobby-name">Hobby Name <span class="req-star">*</span></label>
                     <input type="text" id="add-hobby-name" class="form-control" placeholder="e.g. Photography / Chess"
                         required>
                 </div>
                 <div class="form-group">
-                    <label for="add-hobby-details">Participation details</label>
+                    <label for="add-hobby-details">Participation details <span class="req-star">*</span></label>
                     <input type="text" id="add-hobby-details" class="form-control"
                         placeholder="e.g. Participated in Annual Youth Fest" required>
                 </div>
@@ -1751,13 +1751,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="add-cert-duration">Duration</label>
+                        <label for="add-cert-duration">Duration <span class="req-star">*</span></label>
                         <input type="text" id="add-cert-duration" class="form-control" placeholder="e.g. 6 Weeks"
                             required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="add-cert-program">Program / Course Name</label>
+                    <label for="add-cert-program">Program / Course Name <span class="req-star">*</span></label>
                     <input type="text" id="add-cert-program" class="form-control"
                         placeholder="e.g. AWS Cloud Practitioner" required>
                 </div>
@@ -1770,7 +1770,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="add-cert-grade">Grade / Score</label>
+                        <label for="add-cert-grade">Grade / Score <span class="req-star">*</span></label>
                         <input type="text" id="add-cert-grade" class="form-control" placeholder="e.g. A+ or 90%"
                             required>
                     </div>
@@ -1793,11 +1793,11 @@
             <form id="form-add-internship">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="add-intern-date">Drive Date</label>
+                        <label for="add-intern-date">Drive Date <span class="req-star">*</span></label>
                         <input type="date" id="add-intern-date" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="add-intern-company">Company Name</label>
+                        <label for="add-intern-company">Company Name <span class="req-star">*</span></label>
                         <input type="text" id="add-intern-company" class="form-control" placeholder="e.g. Google India"
                             required>
                     </div>
@@ -1821,12 +1821,12 @@
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="add-intern-role">Designation</label>
+                        <label for="add-intern-role">Designation <span class="req-star">*</span></label>
                         <input type="text" id="add-intern-role" class="form-control"
                             placeholder="e.g. Software Engineer Intern" required>
                     </div>
                     <div class="form-group">
-                        <label for="add-intern-project">Project Title</label>
+                        <label for="add-intern-project">Project Title <span class="req-star">*</span></label>
                         <input type="text" id="add-intern-project" class="form-control"
                             placeholder="e.g. Machine Learning Classifier" required>
                     </div>
@@ -1876,13 +1876,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="approve-roll-no">Assign Roll Number / Student ID *</label>
+                    <label for="approve-roll-no">Assign Roll Number / Student ID <span class="req-star">*</span></label>
                     <input type="text" id="approve-roll-no" class="form-control" placeholder="e.g. 230101050" required>
                 </div>
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="approve-course">Course *</label>
+                        <label for="approve-course">Course <span class="req-star">*</span></label>
                         <select id="approve-course" class="form-control" required>
                             <option value="B.Tech">B.Tech</option>
                             <option value="BCA">BCA</option>
@@ -1894,7 +1894,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="approve-branch">Branch / Department *</label>
+                        <label for="approve-branch">Branch / Department <span class="req-star">*</span></label>
                         <select id="approve-branch" class="form-control" required>
                             <option value="CSE">CSE</option>
                             <option value="AIML">AIML</option>
@@ -2067,15 +2067,15 @@
             </div>
             <form id="form-force-password-change">
                 <div class="form-group">
-                    <label for="force-current-password">Current Temporary Password *</label>
+                    <label for="force-current-password">Current Temporary Password <span class="req-star">*</span></label>
                     <input type="password" id="force-current-password" class="form-control" placeholder="Enter password from email" required>
                 </div>
                 <div class="form-group">
-                    <label for="force-new-password">New Password * (min 8 chars)</label>
+                    <label for="force-new-password">New Password <span class="req-star">*</span> (min 8 chars)</label>
                     <input type="password" id="force-new-password" class="form-control" minlength="8" placeholder="••••••••" required>
                 </div>
                 <div class="form-group">
-                    <label for="force-confirm-password">Confirm New Password *</label>
+                    <label for="force-confirm-password">Confirm New Password <span class="req-star">*</span></label>
                     <input type="password" id="force-confirm-password" class="form-control" minlength="8" placeholder="••••••••" required>
                 </div>
                 <div id="force-password-error" style="display: none; color: #ef4444; font-size: 13px; margin-bottom: 12px;"></div>

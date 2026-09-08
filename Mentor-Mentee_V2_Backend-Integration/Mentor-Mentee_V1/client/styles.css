@@ -205,6 +205,35 @@ body {
     letter-spacing: 0.05em;
 }
 
+/* Mandatory / Required field indicator styling */
+.req-star,
+.required-star,
+.mandatory-star,
+.required-asterisk {
+    color: #ef4444 !important;
+    font-weight: 700;
+    margin-left: 3px;
+    font-size: 0.95em;
+    display: inline-block;
+    vertical-align: baseline;
+}
+
+/* Auto-apply red asterisk to labels of required form controls */
+.form-group:has(> input[required]):not(:has(.req-star)):not(:has(.required-star)) > label:first-of-type::after,
+.form-group:has(> select[required]):not(:has(.req-star)):not(:has(.required-star)) > label:first-of-type::after,
+.form-group:has(> textarea[required]):not(:has(.req-star)):not(:has(.required-star)) > label:first-of-type::after,
+.form-group:has(.input-wrapper > input[required]):not(:has(.req-star)):not(:has(.required-star)) > label:first-of-type::after,
+.form-group:has(.input-wrapper > select[required]):not(:has(.req-star)):not(:has(.required-star)) > label:first-of-type::after,
+.form-group:has(.input-wrapper > textarea[required]):not(:has(.req-star)):not(:has(.required-star)) > label:first-of-type::after,
+.form-group:has(> .form-control[required]):not(:has(.req-star)):not(:has(.required-star)) > label:first-of-type::after,
+label.required:not(:has(.req-star)):not(:has(.required-star))::after,
+label[data-required="true"]:not(:has(.req-star)):not(:has(.required-star))::after {
+    content: " *";
+    color: #ef4444 !important;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
 .input-wrapper {
     position: relative;
 }

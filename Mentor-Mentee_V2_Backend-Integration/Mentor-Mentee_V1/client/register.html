@@ -153,6 +153,14 @@
             margin-bottom: 6px;
         }
 
+        .req-star, .required-star, .mandatory-star {
+            color: #ef4444 !important;
+            font-weight: 700;
+            margin-left: 3px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
         .form-control {
             width: 100%;
             padding: 12px 14px;
@@ -420,18 +428,18 @@
 
                 <form id="initiate-form">
                     <div class="form-group">
-                        <label for="student-name">Full Name *</label>
+                        <label for="student-name">Full Name <span class="req-star">*</span></label>
                         <input type="text" id="student-name" class="form-control" placeholder="e.g. Rahul Sharma" required autocomplete="name">
                     </div>
 
                     <div class="form-group">
-                        <label for="student-email">Email Address *</label>
+                        <label for="student-email">Email Address <span class="req-star">*</span></label>
                         <input type="email" id="student-email" class="form-control" placeholder="e.g. student@gmail.com" required autocomplete="email">
                         <small id="email-lock-note" style="display: none; color: #64748b; font-size: 11px; margin-top: 4px;">🔒 Bound to this invitation link</small>
                     </div>
 
                     <div class="form-group">
-                        <label for="student-mobile">Mobile Number (10 Digits) *</label>
+                        <label for="student-mobile">Mobile Number (10 Digits) <span class="req-star">*</span></label>
                         <input type="tel" id="student-mobile" class="form-control" placeholder="e.g. 9876543210" pattern="[6-9][0-9]{9}" maxlength="10" required autocomplete="tel">
                     </div>
 
