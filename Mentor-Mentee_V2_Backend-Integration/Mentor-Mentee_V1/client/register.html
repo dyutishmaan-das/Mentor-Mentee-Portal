@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Self-Registration - Haridwar University</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="HU-Logo1.png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a192f 0%, #0f3a7a 50%, #1e3c72 100%);
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1e293b;
+        }
+
+        .reg-container {
+            width: 100%;
+            max-width: 520px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reg-header {
+            background: linear-gradient(135deg, #0f3a7a 0%, #1e5a9e 100%);
+            padding: 30px 24px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .reg-header img {
+            height: 54px;
+            width: auto;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .reg-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .reg-header p {
+            margin: 6px 0 0 0;
+            font-size: 14px;
+            color: #dbeafe;
+        }
+
+        .reg-body {
+            padding: 32px 28px;
+        }
+
+        .step-progress {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .step-progress::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 15%;
+            right: 15%;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .step-item {
+            position: relative;
+            z-index: 2;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 0 8px;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .step-item.active .step-circle {
+            background: #0f3a7a;
+            color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(15, 58, 122, 0.15);
+        }
+
+        .step-item.completed .step-circle {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        .step-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .step-item.active .step-label {
+            color: #0f3a7a;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+            background: #ffffff;
+            color: #1e293b;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #0f3a7a;
+            box-shadow: 0 0 0 3px rgba(15, 58, 122, 0.12);
+        }
+
+        .form-control[readonly] {
+            background: #f8fafc;
+            color: #475569;
+            cursor: not-allowed;
+            border-color: #e2e8f0;
+        }
+
+        .btn-primary-reg {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0f3a7a 0%, #1e5a9e 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(15, 58, 122, 0.25);
+        }
+
+        .btn-primary-reg:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(15, 58, 122, 0.35);
+        }
+
+        .btn-primary-reg:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .otp-input-container {
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .otp-input {
+            width: 220px;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 12px;
+            text-align: center;
+            padding: 12px 16px;
+            border: 2px solid #0f3a7a;
+            border-radius: 10px;
+            background: #f8fafc;
+            font-family: 'Space Grotesk', monospace;
+            color: #0f3a7a;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(15, 58, 122, 0.2);
+            background: #ffffff;
+        }
+
+        .timer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #fef3c7;
+            color: #92400e;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 12px 0 18px 0;
+        }
+
+        .resend-link {
+            display: inline-block;
+            color: #0f3a7a;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        .resend-link.disabled {
+            color: #94a3b8;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .info-card {
+            background: #f0f9ff;
+            border-left: 4px solid #0284c7;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #0369a1;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .error-card {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #b91c1c;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .success-box {
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #ecfdf5;
+            color: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px auto;
+            font-size: 36px;
+            border: 3px solid #a7f3d0;
+        }
+
+        .success-box h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #065f46;
+            margin: 0 0 10px 0;
+        }
+
+        .success-box p {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+            margin: 0 0 20px 0;
+        }
+
+        .instructions-panel {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .instructions-panel h4 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .instructions-panel ol {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .instructions-panel ol li {
+            margin-bottom: 4px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #ffffff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="reg-container">
+        <!-- Header -->
+        <div class="reg-header">
+            <img src="HU-Logo1.png" alt="Haridwar University Logo">
+            <h1>Haridwar University</h1>
+            <p>Student Progression & Mentoring Portal</p>
+        </div>
+
+        <div class="reg-body">
+
+            <!-- Step Progress Indicator -->
+            <div id="step-progress" class="step-progress" style="display: none;">
+                <div id="step-node-1" class="step-item active">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Details</div>
+                </div>
+                <div id="step-node-2" class="step-item">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">OTP</div>
+                </div>
+                <div id="step-node-3" class="step-item">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Approval</div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" style="text-align: center; padding: 40px 20px;">
+                <div class="spinner" style="width: 32px; height: 32px; border-width: 3px; border-top-color: #0f3a7a; border-color: rgba(15, 58, 122, 0.2); border-top-color: #0f3a7a;"></div>
+                <p style="margin-top: 16px; font-size: 14px; color: #64748b; font-weight: 500;">Validating registration link…</p>
+            </div>
+
+            <!-- Invalid Token State -->
+            <div id="invalid-state" style="display: none;">
+                <div class="error-card" style="margin-bottom: 24px;">
+                    <strong>⚠️ Registration Link Invalid or Expired</strong>
+                    <p id="invalid-reason" style="margin: 6px 0 0 0; font-size: 13px;">This link has either expired or reached its maximum allowed uses. Please contact your administrator to request a new registration invitation link.</p>
+                </div>
+                <a href="/" class="btn-primary-reg" style="text-decoration: none;">
+                    Go to Portal Login
+                </a>
+            </div>
+
+            <!-- Step 1: Initial Form (Name, Email, Mobile) -->
+            <div id="step-1-panel" style="display: none;">
+                <div class="info-card">
+                    ✨ <strong>Quick Registration:</strong> Enter your name and mobile number. We will send a 6-digit verification code to your email.
+                </div>
+
+                <div id="step1-error" class="error-card" style="display: none;"></div>
+
+                <form id="initiate-form">
+                    <div class="form-group">
+                        <label for="student-name">Full Name *</label>
+                        <input type="text" id="student-name" class="form-control" placeholder="e.g. Rahul Sharma" required autocomplete="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="student-email">Email Address *</label>
+                        <input type="email" id="student-email" class="form-control" placeholder="e.g. student@gmail.com" required autocomplete="email">
+                        <small id="email-lock-note" style="display: none; color: #64748b; font-size: 11px; margin-top: 4px;">🔒 Bound to this invitation link</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="student-mobile">Mobile Number (10 Digits) *</label>
+                        <input type="tel" id="student-mobile" class="form-control" placeholder="e.g. 9876543210" pattern="[6-9][0-9]{9}" maxlength="10" required autocomplete="tel">
+                    </div>
+
+                    <button type="submit" id="btn-send-otp" class="btn-primary-reg" style="margin-top: 24px;">
+                        <span>Send Verification OTP</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Step 2: OTP Verification Form -->
+            <div id="step-2-panel" style="display: none;">
+                <div style="text-align: center;">
+                    <p style="font-size: 14px; color: #475569; margin: 0 0 4px 0;">
+                        We sent a 6-digit OTP code to:
+                    </p>
+                    <p id="otp-target-email" style="font-size: 15px; font-weight: 700; color: #0f3a7a; margin: 0;">
+                        student@email.com
+                    </p>
+
+                    <div class="timer-badge">
+                        <span>⏱️ Code expires in:</span>
+                        <span id="countdown-timer">10:00</span>
+                    </div>
+
+                    <div id="step2-error" class="error-card" style="display: none; text-align: left;"></div>
+
+                    <form id="verify-otp-form">
+                        <div class="otp-input-container">
+                            <input type="text" id="otp-code" class="otp-input" maxlength="6" pattern="[0-9]{6}" placeholder="------" required autocomplete="one-time-code" autofocus>
+                        </div>
+
+                        <button type="submit" id="btn-verify-otp" class="btn-primary-reg">
+                            <span>Verify & Submit Registration</span>
+                        </button>
+                    </form>
+
+                    <div style="margin-top: 18px;">
+                        <a id="btn-resend-otp" class="resend-link disabled">Resend OTP Code (<span id="resend-timer">30</span>s)</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Success Screen -->
+            <div id="step-3-panel" style="display: none;">
+                <div class="success-box">
+                    <div class="success-icon">✓</div>
+                    <h2>Registration Submitted!</h2>
+                    <p>Your email has been verified successfully and your application is now in the <strong>Admin Approval Queue</strong>.</p>
+
+                    <div class="instructions-panel">
+                        <h4>📋 What Happens Next?</h4>
+                        <ol>
+                            <li>Our administrative team / verification system will review your application.</li>
+                            <li>Upon approval, a <strong>temporary password</strong> and your assigned Roll Number will be sent to your email.</li>
+                            <li>Use your temporary password to log in and complete your full profile.</li>
+                        </ol>
+                    </div>
+
+                    <a href="/" class="btn-primary-reg" style="text-decoration: none; margin-top: 16px;">
+                        Return to Portal Login
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Client Script -->
+    <script>
+        const API_BASE = '/api';
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const prefilledEmail = urlParams.get('email');
+
+        let currentEmail = '';
+        let timerInterval = null;
+        let resendCountdown = 30;
+        let resendInterval = null;
+
+        // Elements
+        const loadingState = document.getElementById('loading-state');
+        const invalidState = document.getElementById('invalid-state');
+        const invalidReason = document.getElementById('invalid-reason');
+        const stepProgress = document.getElementById('step-progress');
+        const step1Panel = document.getElementById('step-1-panel');
+        const step2Panel = document.getElementById('step-2-panel');
+        const step3Panel = document.getElementById('step-3-panel');
+
+        const stepNode1 = document.getElementById('step-node-1');
+        const stepNode2 = document.getElementById('step-node-2');
+        const stepNode3 = document.getElementById('step-node-3');
+
+        const initiateForm = document.getElementById('initiate-form');
+        const studentNameInput = document.getElementById('student-name');
+        const studentEmailInput = document.getElementById('student-email');
+        const studentMobileInput = document.getElementById('student-mobile');
+        const emailLockNote = document.getElementById('email-lock-note');
+        const btnSendOtp = document.getElementById('btn-send-otp');
+        const step1Error = document.getElementById('step1-error');
+
+        const verifyOtpForm = document.getElementById('verify-otp-form');
+        const otpTargetEmail = document.getElementById('otp-target-email');
+        const countdownTimer = document.getElementById('countdown-timer');
+        const otpCodeInput = document.getElementById('otp-code');
+        const btnVerifyOtp = document.getElementById('btn-verify-otp');
+        const step2Error = document.getElementById('step2-error');
+        const btnResendOtp = document.getElementById('btn-resend-otp');
+        const resendTimer = document.getElementById('resend-timer');
+
+        // 1. Initial Validation
+        async function validateTokenOnLoad() {
+            if (!token) {
+                showInvalid('No registration token was provided. Please use the complete link sent to your email.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/registration/validate/${token}`);
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    showInvalid(data.message || 'Registration link is invalid or expired.');
+                    return;
+                }
+
+                // Valid token
+                loadingState.style.display = 'none';
+                stepProgress.style.display = 'flex';
+                step1Panel.style.display = 'block';
+
+                // Check assigned email
+                const assignedEmail = data.data.assignedEmail || prefilledEmail;
+                if (assignedEmail) {
+                    studentEmailInput.value = assignedEmail;
+                    studentEmailInput.readOnly = true;
+                    emailLockNote.style.display = 'block';
+                }
+
+                if (data.data.studentName) {
+                    studentNameInput.value = data.data.studentName;
+                }
+
+            } catch (err) {
+                showInvalid('Failed to connect to the server. Please check your internet connection.');
+            }
+        }
+
+        function showInvalid(msg) {
+            loadingState.style.display = 'none';
+            stepProgress.style.display = 'none';
+            step1Panel.style.display = 'none';
+            step2Panel.style.display = 'none';
+            step3Panel.style.display = 'none';
+            invalidReason.textContent = msg;
+            invalidState.style.display = 'block';
+        }
+
+        // 2. Submit Step 1: Request OTP
+        initiateForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            step1Error.style.display = 'none';
+
+            const name = studentNameInput.value.trim();
+            const email = studentEmailInput.value.trim().toLowerCase();
+            const mobile = studentMobileInput.value.trim();
+
+            if (!name || !email || !mobile) {
+                showError(step1Error, 'Please fill in all required fields.');
+                return;
+            }
+
+            btnSendOtp.disabled = true;
+            btnSendOtp.innerHTML = '<span class="spinner"></span> <span>Sending OTP…</span>';
+
+            try {
+                const response = await fetch(`${API_BASE}/registration/initiate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, name, email, mobile }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    showError(step1Error, data.message || 'Failed to initiate registration.');
+                    btnSendOtp.disabled = false;
+                    btnSendOtp.innerHTML = '<span>Send Verification OTP</span>';
+                    return;
+                }
+
+                // Success -> Transition to Step 2
+                currentEmail = email;
+                otpTargetEmail.textContent = email;
+                step1Panel.style.display = 'none';
+                step2Panel.style.display = 'block';
+
+                stepNode1.classList.remove('active');
+                stepNode1.classList.add('completed');
+                stepNode2.classList.add('active');
+
+                startTimer(10 * 60);
+                startResendCountdown();
+                otpCodeInput.focus();
+
+            } catch (err) {
+                showError(step1Error, 'Network error. Please try again.');
+                btnSendOtp.disabled = false;
+                btnSendOtp.innerHTML = '<span>Send Verification OTP</span>';
+            }
+        });
+
+        // 3. Submit Step 2: Verify OTP
+        verifyOtpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            step2Error.style.display = 'none';
+
+            const otp = otpCodeInput.value.trim();
+            if (!otp || otp.length !== 6) {
+                showError(step2Error, 'Please enter a valid 6-digit OTP code.');
+                return;
+            }
+
+            btnVerifyOtp.disabled = true;
+            btnVerifyOtp.innerHTML = '<span class="spinner"></span> <span>Verifying…</span>';
+
+            try {
+                const response = await fetch(`${API_BASE}/registration/verify-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentEmail, otp }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    showError(step2Error, data.message || 'Invalid or expired OTP code.');
+                    btnVerifyOtp.disabled = false;
+                    btnVerifyOtp.innerHTML = '<span>Verify & Submit Registration</span>';
+                    return;
+                }
+
+                // Success -> Transition to Step 3
+                clearInterval(timerInterval);
+                clearInterval(resendInterval);
+
+                step2Panel.style.display = 'none';
+                step3Panel.style.display = 'block';
+
+                stepNode2.classList.remove('active');
+                stepNode2.classList.add('completed');
+                stepNode3.classList.add('active');
+
+            } catch (err) {
+                showError(step2Error, 'Network error. Please try again.');
+                btnVerifyOtp.disabled = false;
+                btnVerifyOtp.innerHTML = '<span>Verify & Submit Registration</span>';
+            }
+        });
+
+        // 4. Resend OTP
+        btnResendOtp.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (btnResendOtp.classList.contains('disabled')) return;
+
+            btnResendOtp.classList.add('disabled');
+            step2Error.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/registration/resend-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentEmail }),
+                });
+
+                const data = await response.json();
+                if (response.ok && data.success) {
+                    startTimer(10 * 60);
+                    startResendCountdown();
+                } else {
+                    showError(step2Error, data.message || 'Failed to resend OTP.');
+                }
+            } catch (err) {
+                showError(step2Error, 'Network error when requesting new OTP.');
+            }
+        });
+
+        function startTimer(duration) {
+            clearInterval(timerInterval);
+            let timer = duration;
+            updateTimerDisplay(timer);
+
+            timerInterval = setInterval(() => {
+                timer--;
+                updateTimerDisplay(timer);
+                if (timer <= 0) {
+                    clearInterval(timerInterval);
+                    countdownTimer.textContent = 'EXPIRED';
+                    showError(step2Error, 'OTP has expired. Please click Resend OTP.');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            countdownTimer.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function startResendCountdown() {
+            clearInterval(resendInterval);
+            resendCountdown = 30;
+            btnResendOtp.classList.add('disabled');
+            btnResendOtp.innerHTML = `Resend OTP Code (<span id="resend-timer">${resendCountdown}</span>s)`;
+
+            resendInterval = setInterval(() => {
+                resendCountdown--;
+                const timerSpan = document.getElementById('resend-timer');
+                if (timerSpan) timerSpan.textContent = resendCountdown;
+
+                if (resendCountdown <= 0) {
+                    clearInterval(resendInterval);
+                    btnResendOtp.classList.remove('disabled');
+                    btnResendOtp.innerHTML = 'Resend OTP Code';
+                }
+            }, 1000);
+        }
+
+        function showError(container, msg) {
+            container.textContent = msg;
+            container.style.display = 'block';
+        }
+
+        // Initialize on load
+        validateTokenOnLoad();
+    </script>
+</body>
+
+</html>

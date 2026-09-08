@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { authenticate } from '../middleware/auth.js';
+import { authorize } from '../middleware/authorize.js';
+import * as controller from '../controllers/systemController.js';
+const router = Router();
+router.use(authenticate);
+router.get('/notifications', controller.notifications);
+router.patch('/notifications/:id/read', controller.markNotificationRead);
+router.get('/audit-logs', authorize('ADMIN', 'HOD'), controller.auditLogs);
+router.get('/analytics', authorize('ADMIN', 'HOD', 'ACADEMIC_FACULTY'), controller.analytics);
+export default router;

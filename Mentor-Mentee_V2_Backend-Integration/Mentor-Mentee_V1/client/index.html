@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haridwar University - Student Progression Portal</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="HU-Logo1.png">
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js CDN -->
+    <script src="/vendor/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <!-- ============================================ -->
+    <!-- 1. LOGIN SCREEN -->
+    <!-- ============================================ -->
+    <div id="login-screen" class="login-layout">
+        <div class="login-card">
+            <div class="login-logo">
+                <!-- Haridwar University Logo -->
+                <img src="HU-Logo1.png" alt="Haridwar University" style="height: 60px; width: auto; margin-bottom: 10px;">
+                <h2 style="margin: 0; font-family: 'Outfit'; letter-spacing: -0.03em;">Haridwar University</h2>
+            </div>
+            <p class="login-subtitle">Mentor-Mentee Portal</p>
+
+            <!-- Login Form -->
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-id">Official Email or Roll No</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <input type="text" id="login-id" class="form-control" placeholder="e.g. 230101001, admin@mentormentee.local" required
+                            autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <input type="password" id="login-password" class="form-control" placeholder="••••••••" required
+                            autocomplete="current-password">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" style="margin-top: 1.5rem;">Sign In</button>
+            </form>
+
+            <div class="login-footer-info">
+                <p>Test Logins:</p>
+                <code
+                    style="font-size: 0.8rem; background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px; display: block; margin-top: 0.5rem; text-align: left; line-height: 1.5;">
+                    Student: 230101001 / student123<br>
+                    Academic Faculty: academic@demo.edu / demo123<br>
+                    Mentor: mentor@demo.edu / demo123<br>
+                    Admin: admin@mentormentee.local / Admin@12345
+                </code>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 2. PORTAL APP SHELL -->
+    <!-- ============================================ -->
+    <div id="app-screen" class="app-container" style="display: none;">
+
+        <!-- Header -->
+        <header>
+            <div class="header-branding">
+                <div class="university-logo">
+                    <img src="HU-Logo1.png" alt="Haridwar University" style="height: 32px; width: auto;">
+                </div>
+                <div class="header-title">
+                    <h1>Haridwar University</h1>
+                    <p>Student Progression Portal</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <span id="portal-badge" class="portal-badge">Student Portal</span>
+
+                <!-- Google Sheets connection indicator -->
+                <div class="conn-indicator" title="Google Sheets sync status">
+                    <span id="conn-dot"></span>
+                    <span id="conn-label">Connecting…</span>
+                </div>
+
+                <!-- Theme Toggle Button -->
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+                    <span id="theme-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </span>
+                </button>
+
+                <!-- Logout Button -->
+                <button type="button" class="btn-logout">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div id="sidebar-profile-card" class="profile-card">
+                <!-- Loaded dynamically based on active role -->
+            </div>
+
+            <ul id="sidebar-nav-menu" class="nav-menu">
+                <!-- Loaded dynamically -->
+            </ul>
+        </aside>
+
+        <!-- Main View Container -->
+        <main>
+
+            <!-- ============================================ -->
+            <!-- 2.1 STUDENT/MENTEE PORTAL SECTIONS -->
+            <!-- ============================================ -->
+
+            <!-- STUDENT OVERVIEW -->
+            <div id="student-overview" class="view-section active">
+                <div class="section-header">
+                    <h2 class="section-title">Academic & Attendance Dashboard</h2>
+                </div>
+
+                <!-- Student Profile Completion Warning Banner -->
+                <div id="student-profile-warning-banner" class="alert-info-box" style="display: none; background: rgba(234, 88, 12, 0.08); border-left: 4px solid #ea580c; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.5rem;">📝</span>
+                        <div>
+                            <strong style="color: #ea580c;">Profile Incomplete:</strong> Please complete your personal, parent, and academic details to finalize your university registration.
+                        </div>
+                    </div>
+                    <button type="button" id="btn-goto-profile" class="btn btn-primary" style="background: #ea580c; border: none; font-size: 0.85rem; padding: 6px 14px; white-space: nowrap;">Complete Profile Now &rarr;</button>
+                </div>
+
+                <!-- Student Section Pending Allotment Banner -->
+                <div id="student-section-pending-banner" class="alert-info-box" style="display: none; background: #eff6ff; border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.5rem;">ℹ️</span>
+                        <div>
+                            <strong style="color: #1d4ed8;">Profile Submitted:</strong> Your details have been submitted successfully. Your classroom section allotment is currently in progress by the Head of Department (HOD).
+                        </div>
+                    </div>
+                    <span class="badge-tag" style="background: #dbeafe; color: #1e40af; font-weight: 600; padding: 6px 12px; font-size: 13px;">⏳ Section Allotment Pending</span>
+                </div>
+
+                <!-- KPIs Row -->
+                <div class="dashboard-grid">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Sessions Logged</div>
+                            <div id="student-kpi-sessions" class="kpi-value">0</div>
+                        </div>
+                        <div class="kpi-icon kpi-icon-sessions">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Current CGPA</div>
+                            <div id="student-kpi-cgpa" class="kpi-value">0.00</div>
+                        </div>
+                        <div class="kpi-icon kpi-icon-cgpa">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Attendance Average</div>
+                            <div id="student-kpi-attendance" class="kpi-value">0.0%</div>
+                        </div>
+                        <div class="kpi-icon kpi-icon-attendance">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                </polygon>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Active Backlogs</div>
+                            <div id="student-kpi-backlogs" class="kpi-value">0</div>
+                        </div>
+                        <div class="kpi-icon kpi-icon-backlogs">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Academic Progress Trend</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="cgpaChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Attendance Trend (%)</h3>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="attendanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STUDENT PROFILE FORM -->
+            <div id="student-profile" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Complete Mentee Profile Form</h2>
+                </div>
+
+                <form id="student-profile-form">
+                    <!-- SECTION 1: Personal Profile Details -->
+                    <div class="card">
+                        <div class="card-title"><span>1. Personal & Admission Information</span></div>
+
+                        <!-- Photo Upload Section -->
+                        <div style="background: var(--card-bg); border: 2px dashed var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                            <h4 style="margin-bottom: 1rem; color: var(--primary-light); font-size: 0.95rem;">Upload Photos (Student, Father, Mother, Guardian)</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Upload all 4 required photos. Accepted formats: JPG, PNG, WEBP. Max size: 500KB per photo.</p>
+                            
+                            <div class="form-grid" style="margin-bottom: 1rem;">
+                                <div class="form-group">
+                                    <label for="upload-student-photo" style="display: block; margin-bottom: 0.5rem;">Student Photo</label>
+                                    <input type="file" id="upload-student-photo" accept="image/*" class="form-control" style="padding: 0.5rem;">
+                                    <div id="preview-student-photo" style="margin-top: 0.5rem; display: none;">
+                                        <img src="" alt="Student" style="max-width: 100px; max-height: 100px; border-radius: 8px; border: 2px solid var(--border-color);">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="upload-father-photo" style="display: block; margin-bottom: 0.5rem;">Father Photo</label>
+                                    <input type="file" id="upload-father-photo" accept="image/*" class="form-control" style="padding: 0.5rem;">
+                                    <div id="preview-father-photo" style="margin-top: 0.5rem; display: none;">
+                                        <img src="" alt="Father" style="max-width: 100px; max-height: 100px; border-radius: 8px; border: 2px solid var(--border-color);">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="upload-mother-photo" style="display: block; margin-bottom: 0.5rem;">Mother Photo</label>
+                                    <input type="file" id="upload-mother-photo" accept="image/*" class="form-control" style="padding: 0.5rem;">
+                                    <div id="preview-mother-photo" style="margin-top: 0.5rem; display: none;">
+                                        <img src="" alt="Mother" style="max-width: 100px; max-height: 100px; border-radius: 8px; border: 2px solid var(--border-color);">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="upload-guardian-photo" style="display: block; margin-bottom: 0.5rem;">Guardian Photo</label>
+                                    <input type="file" id="upload-guardian-photo" accept="image/*" class="form-control" style="padding: 0.5rem;">
+                                    <div id="preview-guardian-photo" style="margin-top: 0.5rem; display: none;">
+                                        <img src="" alt="Guardian" style="max-width: 100px; max-height: 100px; border-radius: 8px; border: 2px solid var(--border-color);">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="button" id="btn-upload-photos" class="btn btn-primary" style="margin-top: 0.5rem;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem;">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                Upload All Photos
+                            </button>
+                            <span id="upload-status" style="margin-left: 1rem; font-size: 0.85rem; color: var(--text-muted);"></span>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Roll No</label>
+                                <input type="text" id="student-id-field" class="form-control" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="student-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Official College Email</label>
+                                <input type="email" id="student-email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" id="student-dob" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-grid dense">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="student-category" class="form-control" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Blood Group</label>
+                                <select id="student-blood" class="form-control" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Identification Mark</label>
+                                <input type="text" id="student-mark" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Dropdown institutional fields (Locked for student, edit by Mentor/Admin) -->
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Course</label>
+                                <select id="student-course" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select id="student-branch" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Specialization</label>
+                                <select id="student-specialization" class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div class="form-grid dense">
+                            <div class="form-group">
+                                <label>Semester</label>
+                                <select id="student-semester" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Batch</label>
+                                <select id="student-batch" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Section</label>
+                                <select id="student-section" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Student Status</label>
+                                <select id="student-type" class="form-control">
+                                    <option value="Day Scholar">Day Scholar</option>
+                                    <option value="Hosteller">Hosteller</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Mobile Number 1</label>
+                                <input type="text" id="student-phone1" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Mobile Number 2 (Alternative)</label>
+                                <input type="text" id="student-phone2" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Number of Siblings</label>
+                                <input type="number" id="student-siblings" class="form-control" min="0" value="0">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group form-group-full">
+                                <label>Present Address</label>
+                                <textarea id="student-addr-present" class="form-control" style="height: 60px;"
+                                    required></textarea>
+                            </div>
+                            <div class="form-group form-group-full">
+                                <label>Permanent Address</label>
+                                <textarea id="student-addr-perm" class="form-control" style="height: 60px;"
+                                    required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: Parents Information -->
+                    <div class="card">
+                        <div class="card-title"><span>2. Parent / Family Information</span></div>
+                        <div class="grid-2col">
+                            <div>
+                                <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Father</h4>
+                                <div class="form-group">
+                                    <label>Father's Name</label>
+                                    <input type="text" id="parent-father-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Father Mobile 1</label>
+                                    <input type="text" id="parent-father-phone1" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Father Mobile 2</label>
+                                    <input type="text" id="parent-father-phone2" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Father Email</label>
+                                    <input type="email" id="parent-father-email" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Father Photo URL (Auto-filled after upload)</label>
+                                    <input type="text" id="parent-father-photo" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Mother</h4>
+                                <div class="form-group">
+                                    <label>Mother's Name</label>
+                                    <input type="text" id="parent-mother-name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Mother Mobile 1</label>
+                                    <input type="text" id="parent-mother-phone1" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Mother Mobile 2</label>
+                                    <input type="text" id="parent-mother-phone2" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mother Email</label>
+                                    <input type="email" id="parent-mother-email" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mother Photo URL (Auto-filled after upload)</label>
+                                    <input type="text" id="parent-mother-photo" class="form-control" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: Local Guardian -->
+                    <div class="card">
+                        <div class="card-title"><span>3. Local Guardian Details (If Outside Uttarakhand)</span></div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Guardian Name</label>
+                                <input type="text" id="guardian-name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Relationship</label>
+                                <input type="text" id="guardian-relation" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Occupation</label>
+                                <input type="text" id="guardian-occupation" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Guardian Mobile 1</label>
+                                <input type="text" id="guardian-phone1" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Guardian Mobile 2</label>
+                                <input type="text" id="guardian-phone2" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Residential Address</label>
+                            <textarea id="guardian-addr" class="form-control" style="height: 60px;"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: Pre-University Academic Record -->
+                    <div class="card">
+                        <div class="card-title"><span>4. Pre-University Academic Record</span></div>
+                        <div class="grid-2col">
+                            <div>
+                                <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Class 10th</h4>
+                                <div class="form-group">
+                                    <label>School / College Name</label>
+                                    <input type="text" id="pre-10-school" class="form-control" required>
+                                </div>
+                                <div class="form-grid dense">
+                                    <div class="form-group">
+                                        <label>Passing Year</label>
+                                        <input type="text" id="pre-10-year" class="form-control" placeholder="2021"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Board</label>
+                                        <input type="text" id="pre-10-board" class="form-control" placeholder="CBSE"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="form-grid dense">
+                                    <div class="form-group">
+                                        <label>Division</label>
+                                        <select id="pre-10-division" class="form-control">
+                                            <option value="First">First</option>
+                                            <option value="Second">Second</option>
+                                            <option value="Third">Third</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Percentage / CGPA</label>
+                                        <input type="text" id="pre-10-marks" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Class 12th / Diploma</h4>
+                                <div class="form-group">
+                                    <label>School / College Name</label>
+                                    <input type="text" id="pre-12-school" class="form-control" required>
+                                </div>
+                                <div class="form-grid dense">
+                                    <div class="form-group">
+                                        <label>Passing Year</label>
+                                        <input type="text" id="pre-12-year" class="form-control" placeholder="2023"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Board</label>
+                                        <input type="text" id="pre-12-board" class="form-control" placeholder="CBSE"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="form-grid dense">
+                                    <div class="form-group">
+                                        <label>Division</label>
+                                        <select id="pre-12-division" class="form-control">
+                                            <option value="First">First</option>
+                                            <option value="Second">Second</option>
+                                            <option value="Third">Third</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Percentage / CGPA</label>
+                                        <input type="text" id="pre-12-marks" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 5: Transportation & Hostel Info -->
+                    <div class="card">
+                        <div class="card-title"><span>5. Campus Hostel & Transport Accommodation</span></div>
+                        <div id="hostel-fields-group" style="display: none;">
+                            <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Hostel Record</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Hostel Name</label>
+                                    <select id="student-hostel" class="form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Room Number</label>
+                                    <input type="text" id="student-room" class="form-control" placeholder="e.g. 102">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="transport-fields-group" style="display: none;">
+                            <h4 style="margin-bottom: 1rem; color: var(--primary-light);">Transport Record</h4>
+                            <div class="form-group">
+                                <label>Bus Transport Route</label>
+                                <select id="student-route" class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem; margin-bottom: 2rem;">
+                        <button type="submit" class="btn btn-primary" style="padding: 0.8rem 2rem;">Save Profile
+                            Updates</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- STUDENT ACADEMICS -->
+            <div id="student-academics" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Official Semester Records</h2>
+                </div>
+                <div id="student-academic-sem-list">
+                    <!-- Semester Cards loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- STUDENT SESSIONS LOG -->
+            <div id="student-sessions" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Mentoring Sessions History</h2>
+                </div>
+                <div class="card">
+                    <div class="card-title"><span>Conducted Sessions logs</span></div>
+                    <div id="student-sessions-list" class="records-list">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- STUDENT ACTIVITIES & FEEDBACK -->
+            <div id="student-activities" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Activities, Certifications & Feedback</h2>
+                </div>
+
+                <div class="grid-2col">
+                    <!-- Hobbies card -->
+                    <div class="card">
+                        <div class="card-title">
+                            <span>Hobbies & Interests</span>
+                            <button type="button" id="btn-add-hobby" class="btn btn-primary btn-sm">+ Add</button>
+                        </div>
+                        <div id="hobbies-list" class="records-list">
+                            <!-- Dynamic -->
+                        </div>
+                    </div>
+
+                    <!-- Certifications card -->
+                    <div class="card">
+                        <div class="card-title">
+                            <span>Certifications</span>
+                            <button type="button" id="btn-add-cert" class="btn btn-primary btn-sm">+ Add</button>
+                        </div>
+                        <div id="certs-list" class="records-list">
+                            <!-- Dynamic -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <span>Internships & Placement Records</span>
+                        <button type="button" id="btn-add-internship" class="btn btn-primary btn-sm">+ Add</button>
+                    </div>
+                    <div id="internships-list" class="records-list">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+
+                <div class="grid-2col">
+                    <!-- Self Assessment -->
+                    <div class="card">
+                        <div class="card-title"><span>Mentee Self-Assessment Form</span></div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Evaluate your
+                            preparedness and learning progress for the current semester.</p>
+
+                        <form id="self-assessment-form">
+                            <div class="rating-group">
+                                <span class="rating-question">1. Do you attend mentoring sessions sincerely?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="sa-q1-1" name="sa-q1" value="1" class="rating-input"><label
+                                        for="sa-q1-1" class="rating-label">1</label>
+                                    <input type="radio" id="sa-q1-2" name="sa-q1" value="2" class="rating-input"><label
+                                        for="sa-q1-2" class="rating-label">2</label>
+                                    <input type="radio" id="sa-q1-3" name="sa-q1" value="3" class="rating-input"><label
+                                        for="sa-q1-3" class="rating-label">3</label>
+                                    <input type="radio" id="sa-q1-4" name="sa-q1" value="4" class="rating-input"><label
+                                        for="sa-q1-4" class="rating-label">4</label>
+                                    <input type="radio" id="sa-q1-5" name="sa-q1" value="5" class="rating-input"
+                                        checked><label for="sa-q1-5" class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">2. Do you follow mentor suggestions?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="sa-q2-1" name="sa-q2" value="1" class="rating-input"><label
+                                        for="sa-q2-1" class="rating-label">1</label>
+                                    <input type="radio" id="sa-q2-2" name="sa-q2" value="2" class="rating-input"><label
+                                        for="sa-q2-2" class="rating-label">2</label>
+                                    <input type="radio" id="sa-q2-3" name="sa-q2" value="3" class="rating-input"><label
+                                        for="sa-q2-3" class="rating-label">3</label>
+                                    <input type="radio" id="sa-q2-4" name="sa-q2" value="4" class="rating-input"><label
+                                        for="sa-q2-4" class="rating-label">4</label>
+                                    <input type="radio" id="sa-q2-5" name="sa-q2" value="5" class="rating-input"
+                                        checked><label for="sa-q2-5" class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">3. How is your academic preparedness?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="sa-q3-1" name="sa-q3" value="1" class="rating-input"><label
+                                        for="sa-q3-1" class="rating-label">1</label>
+                                    <input type="radio" id="sa-q3-2" name="sa-q3" value="2" class="rating-input"><label
+                                        for="sa-q3-2" class="rating-label">2</label>
+                                    <input type="radio" id="sa-q3-3" name="sa-q3" value="3" class="rating-input"><label
+                                        for="sa-q3-3" class="rating-label">3</label>
+                                    <input type="radio" id="sa-q3-4" name="sa-q3" value="4" class="rating-input"><label
+                                        for="sa-q3-4" class="rating-label">4</label>
+                                    <input type="radio" id="sa-q3-5" name="sa-q3" value="5" class="rating-input"
+                                        checked><label for="sa-q3-5" class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">4. Personal/professional development level?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="sa-q4-1" name="sa-q4" value="1" class="rating-input"><label
+                                        for="sa-q4-1" class="rating-label">1</label>
+                                    <input type="radio" id="sa-q4-2" name="sa-q4" value="2" class="rating-input"><label
+                                        for="sa-q4-2" class="rating-label">2</label>
+                                    <input type="radio" id="sa-q4-3" name="sa-q4" value="3" class="rating-input"><label
+                                        for="sa-q4-3" class="rating-label">3</label>
+                                    <input type="radio" id="sa-q4-4" name="sa-q4" value="4" class="rating-input"><label
+                                        for="sa-q4-4" class="rating-label">4</label>
+                                    <input type="radio" id="sa-q4-5" name="sa-q4" value="5" class="rating-input"
+                                        checked><label for="sa-q4-5" class="rating-label">5</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save
+                                Assessment</button>
+                        </form>
+                    </div>
+
+                    <!-- Mentor Feedback Evaluation -->
+                    <div class="card">
+                        <div class="card-title"><span>Anonymous Mentor Feedback</span></div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">This form is
+                            completely anonymous and will only be visible to the Admin/HOD.</p>
+
+                        <form id="feedback-mentor-form">
+                            <div class="rating-group">
+                                <span class="rating-question">1. Is your mentor available when needed?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="fb-q1-1" name="fb-q1" value="1" class="rating-input"><label
+                                        for="fb-q1-1" class="rating-label">1</label>
+                                    <input type="radio" id="fb-q1-2" name="fb-q1" value="2" class="rating-input"><label
+                                        for="fb-q1-2" class="rating-label">2</label>
+                                    <input type="radio" id="fb-q1-3" name="fb-q1" value="3" class="rating-input"><label
+                                        for="fb-q1-3" class="rating-label">3</label>
+                                    <input type="radio" id="fb-q1-4" name="fb-q1" value="4" class="rating-input"><label
+                                        for="fb-q1-4" class="rating-label">4</label>
+                                    <input type="radio" id="fb-q1-5" name="fb-q1" value="5" class="rating-input"
+                                        checked><label for="fb-q1-5" class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">2. Does the mentor listen to your issues?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="fb-q2-1" name="fb-q2" value="1" class="rating-input"><label
+                                        for="fb-q2-1" class="rating-label">1</label>
+                                    <input type="radio" id="fb-q2-2" name="fb-q2" value="2" class="rating-input"><label
+                                        for="fb-q2-2" class="rating-label">2</label>
+                                    <input type="radio" id="fb-q2-3" name="fb-q2" value="3" class="rating-input"><label
+                                        for="fb-q2-3" class="rating-label">3</label>
+                                    <input type="radio" id="fb-q2-4" name="fb-q2" value="4" class="rating-input"><label
+                                        for="fb-q2-4" class="rating-label">4</label>
+                                    <input type="radio" id="fb-q2-5" name="fb-q2" value="5" class="rating-input"
+                                        checked><label for="fb-q2-5" class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">3. Is the mentor prepared for sessions?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="fb-q3-1" name="fb-q3" value="1" class="rating-input"><label
+                                        for="fb-q3-1" class="rating-label">1</label>
+                                    <input type="radio" id="fb-q3-2" name="fb-q3" value="2" class="rating-input"><label
+                                        for="fb-q3-2" class="rating-label">2</label>
+                                    <input type="radio" id="fb-q3-3" name="fb-q3" value="3" class="rating-input"><label
+                                        for="fb-q3-3" class="rating-label">3</label>
+                                    <input type="radio" id="fb-q3-4" name="fb-q3" value="4" class="rating-input"><label
+                                        for="fb-q3-4" class="rating-label">4</label>
+                                    <input type="radio" id="fb-q3-5" name="fb-q3" value="5" class="rating-input"
+                                        checked><label for="fb-q3-5" class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">4. Provides a positive mentoring experience?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="fb-q4-1" name="fb-q4" value="1" class="rating-input"><label
+                                        for="fb-q4-1" class="rating-label">1</label>
+                                    <input type="radio" id="fb-q4-2" name="fb-q4" value="2" class="rating-input"><label
+                                        for="fb-q4-2" class="rating-label">2</label>
+                                    <input type="radio" id="fb-q4-3" name="fb-q4" value="3" class="rating-input"><label
+                                        for="fb-q4-3" class="rating-label">3</label>
+                                    <input type="radio" id="fb-q4-4" name="fb-q4" value="4" class="rating-input"><label
+                                        for="fb-q4-4" class="rating-label">4</label>
+                                    <input type="radio" id="fb-q4-5" name="fb-q4" value="5" class="rating-input"
+                                        checked><label for="fb-q4-5" class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="feedback-comments">Comments / Suggestions</label>
+                                <textarea id="feedback-comments" class="form-control" style="height: 80px;"
+                                    placeholder="Add private feedback notes..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-accent" style="margin-top: 1rem;">Submit Anonymous
+                                Feedback</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- 2.2 MENTOR PORTAL SECTIONS -->
+            <!-- ============================================ -->
+
+            <!-- MENTOR DASHBOARD -->
+            <div id="mentor-dashboard" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">My Mentees Portfolio Review</h2>
+                </div>
+                <div id="mentor-mentees-grid" class="mentee-list-grid">
+                    <!-- Cards loaded dynamically -->
+                </div>
+            </div>
+
+            <!-- MENTOR STUDENT REVIEW PORTAL -->
+            <div id="mentor-student-review" class="view-section">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <a href="#" id="btn-back-to-mentees"
+                            style="color: var(--primary-light); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem;">
+                            &larr; Back to Mentees List
+                        </a>
+                        <h2 class="section-title" style="margin-top: 0.5rem;"><span id="review-student-name">Name</span>
+                            (<span id="review-student-id">Roll No</span>)</h2>
+                    </div>
+                </div>
+
+                <!-- Review Internal Tabs -->
+                <div class="role-tabs" style="margin-bottom: 1.5rem; max-width: 600px;">
+                    <button type="button" class="role-btn review-tab-link active" data-tab="overview">Overview</button>
+                    <button type="button" class="role-btn review-tab-link" data-tab="profile">Mentee Info Form</button>
+                    <button type="button" class="role-btn review-tab-link" data-tab="academics">Academics</button>
+                    <button type="button" class="role-btn review-tab-link" data-tab="sessions">Sessions</button>
+                    <button type="button" class="role-btn review-tab-link" data-tab="assessment">Assessment</button>
+                </div>
+
+                <div id="review-tab-overview" class="review-sub-section">
+                    <!-- Standard student-overview KPI and charts injected here -->
+                </div>
+
+                <div id="review-tab-profile" class="review-sub-section" style="display: none;">
+                    <!-- Forms from student-profile-form injected here -->
+                </div>
+
+                <div id="review-tab-academics" class="review-sub-section" style="display: none;">
+                    <!-- Academics table injected here -->
+                </div>
+
+                <div id="review-tab-sessions" class="review-sub-section" style="display: none;">
+                    <div class="card">
+                        <div class="card-title"><span>Mentoring Sessions Logged</span></div>
+                        <div id="review-sessions-list" class="records-list">
+                            <!-- Dynamic -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="review-tab-assessment" class="review-sub-section" style="display: none;">
+                    <div class="card">
+                        <div class="card-title"><span>Mentor's Assessment of the Student</span></div>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem;">Assess the mentee
+                            on punctuality, leadership, responsibility, and communication.</p>
+
+                        <form id="mentor-assessment-form">
+                            <div class="rating-group">
+                                <span class="rating-question">1. Punctuality & Discipline?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="m-assess-q1-1" name="m-assess-q1" value="1"
+                                        class="rating-input"><label for="m-assess-q1-1" class="rating-label">1</label>
+                                    <input type="radio" id="m-assess-q1-2" name="m-assess-q1" value="2"
+                                        class="rating-input"><label for="m-assess-q1-2" class="rating-label">2</label>
+                                    <input type="radio" id="m-assess-q1-3" name="m-assess-q1" value="3"
+                                        class="rating-input"><label for="m-assess-q1-3" class="rating-label">3</label>
+                                    <input type="radio" id="m-assess-q1-4" name="m-assess-q1" value="4"
+                                        class="rating-input"><label for="m-assess-q1-4" class="rating-label">4</label>
+                                    <input type="radio" id="m-assess-q1-5" name="m-assess-q1" value="5"
+                                        class="rating-input" checked><label for="m-assess-q1-5"
+                                        class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">2. Taking responsibility & Leadership roles?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="m-assess-q2-1" name="m-assess-q2" value="1"
+                                        class="rating-input"><label for="m-assess-q2-1" class="rating-label">1</label>
+                                    <input type="radio" id="m-assess-q2-2" name="m-assess-q2" value="2"
+                                        class="rating-input"><label for="m-assess-q2-2" class="rating-label">2</label>
+                                    <input type="radio" id="m-assess-q2-3" name="m-assess-q2" value="3"
+                                        class="rating-input"><label for="m-assess-q2-3" class="rating-label">3</label>
+                                    <input type="radio" id="m-assess-q2-4" name="m-assess-q2" value="4"
+                                        class="rating-input"><label for="m-assess-q2-4" class="rating-label">4</label>
+                                    <input type="radio" id="m-assess-q2-5" name="m-assess-q2" value="5"
+                                        class="rating-input" checked><label for="m-assess-q2-5"
+                                        class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">3. Team spirit and collaborative skills?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="m-assess-q3-1" name="m-assess-q3" value="1"
+                                        class="rating-input"><label for="m-assess-q3-1" class="rating-label">1</label>
+                                    <input type="radio" id="m-assess-q3-2" name="m-assess-q3" value="2"
+                                        class="rating-input"><label for="m-assess-q3-2" class="rating-label">2</label>
+                                    <input type="radio" id="m-assess-q3-3" name="m-assess-q3" value="3"
+                                        class="rating-input"><label for="m-assess-q3-3" class="rating-label">3</label>
+                                    <input type="radio" id="m-assess-q3-4" name="m-assess-q3" value="4"
+                                        class="rating-input"><label for="m-assess-q3-4" class="rating-label">4</label>
+                                    <input type="radio" id="m-assess-q3-5" name="m-assess-q3" value="5"
+                                        class="rating-input" checked><label for="m-assess-q3-5"
+                                        class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="rating-group">
+                                <span class="rating-question">4. Interpersonal communication & Innovation
+                                    interests?</span>
+                                <div class="rating-options">
+                                    <input type="radio" id="m-assess-q4-1" name="m-assess-q4" value="1"
+                                        class="rating-input"><label for="m-assess-q4-1" class="rating-label">1</label>
+                                    <input type="radio" id="m-assess-q4-2" name="m-assess-q4" value="2"
+                                        class="rating-input"><label for="m-assess-q4-2" class="rating-label">2</label>
+                                    <input type="radio" id="m-assess-q4-3" name="m-assess-q4" value="3"
+                                        class="rating-input"><label for="m-assess-q4-3" class="rating-label">3</label>
+                                    <input type="radio" id="m-assess-q4-4" name="m-assess-q4" value="4"
+                                        class="rating-input"><label for="m-assess-q4-4" class="rating-label">4</label>
+                                    <input type="radio" id="m-assess-q4-5" name="m-assess-q4" value="5"
+                                        class="rating-input" checked><label for="m-assess-q4-5"
+                                        class="rating-label">5</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 1.5rem;">
+                                <label for="m-assess-comments">Mentor Remarks & Action Advice</label>
+                                <textarea id="m-assess-comments" class="form-control" style="height: 100px;"
+                                    placeholder="Identify reasons for poor performance or specific advice..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save Assessment Review</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MENTOR SESSIONS CREATION -->
+            <div id="mentor-sessions" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Log Mentoring Interaction Session</h2>
+                </div>
+                <div class="card">
+                    <div class="card-title"><span>Schedule & Write Log</span></div>
+                    <form id="mentor-add-session-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Select Assigned Mentee</label>
+                                <select id="sess-student-select" class="form-control" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="sess-date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Time</label>
+                                <input type="time" id="sess-time" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Interaction Mode</label>
+                                <select id="sess-mode" class="form-control">
+                                    <option value="In Person">In Person</option>
+                                    <option value="Phone Call">Phone Call / Online</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label>Agenda</label>
+                                <input type="text" id="sess-agenda" class="form-control"
+                                    placeholder="e.g. Midterm performance review" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Discussion Notes</label>
+                            <textarea id="sess-notes" class="form-control" style="height: 100px;"
+                                placeholder="Write observations or notes on student concerns..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Action Items / Recommendations</label>
+                            <input type="text" id="sess-actions" class="form-control"
+                                placeholder="e.g. Attend doubt clearing classes">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Log Session</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- MENTOR PROFILE VIEW -->
+            <div id="mentor-profile-view" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Mentor Profile Record</h2>
+                </div>
+                <div class="card">
+                    <div class="card-title"><span>My Information</span></div>
+                    <form id="mentor-profile-edit-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Mentor Name</label>
+                                <input type="text" id="m-profile-name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="m-profile-email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Designation</label>
+                                <input type="text" id="m-profile-designation" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Department</label>
+                                <input type="text" id="m-profile-dept" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Contact Number</label>
+                                <input type="text" id="m-profile-phone" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Mentorship Period</label>
+                                <input type="text" id="m-profile-period" class="form-control"
+                                    placeholder="e.g. 2023-Present" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Profile
+                            Settings</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- 2.3 ADMIN PORTAL SECTIONS -->
+            <!-- ============================================ -->
+
+            <!-- ADMIN DASHBOARD -->
+            <div id="admin-dashboard" class="view-section">
+                <div class="section-header">
+                    <h2 id="admin-dashboard-title" class="section-title">Admin Management Portal</h2>
+                </div>
+
+                <div class="analytics-panel">
+                    <div class="analytics-card">
+                        <div id="admin-stat-students" class="analytics-value">0</div>
+                        <div id="admin-stat-students-label" class="analytics-label">Total Mentees</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div id="admin-stat-mentors" class="analytics-value">0</div>
+                        <div id="admin-stat-mentors-label" class="analytics-label">Total Mentors</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div id="admin-stat-sessions" class="analytics-value">0</div>
+                        <div id="admin-stat-sessions-label" class="analytics-label">Sessions Conducted</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span id="admin-student-directory-title">All Enrolled Students List</span>
+                            <span id="admin-student-count-badge" class="badge-tag" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-weight: 600;">0 Students</span>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <select id="admin-student-filter-status" class="form-control" style="width: 140px; padding: 0.4rem 0.6rem; font-size: 13px;">
+                                <option value="">All Statuses</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive / Deactivated</option>
+                            </select>
+                            <div class="input-wrapper" style="width: 260px;">
+                                <input type="text" id="admin-student-search" class="form-control"
+                                    placeholder="Search student name, roll, email..." style="padding: 0.45rem 0.85rem; font-size: 13px;">
+                            </div>
+                            <button type="button" id="btn-refresh-admin-students" class="btn btn-secondary" style="padding: 0.45rem 0.85rem; font-size: 13px;">
+                                🔄 Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Roll No</th>
+                                    <th>Name</th>
+                                    <th>Course & Branch</th>
+                                    <th>Semester</th>
+                                    <th>Section</th>
+                                    <th>Status</th>
+                                    <th>CGPA</th>
+                                    <th style="text-align: right;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-student-list-body">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN INDIVIDUAL STUDENT RECORDS EDIT -->
+            <div id="admin-student-records-edit" class="view-section">
+                <div style="margin-bottom: 1.5rem;">
+                    <a href="#" id="btn-back-to-admin"
+                        style="color: var(--primary-light); text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        &larr; Back to Admin Dashboard
+                    </a>
+                    <h2 class="section-title" style="margin-top: 0.5rem;">Manage Records: <span
+                            id="admin-student-name">Name</span> (<span id="admin-student-id">Roll No</span>)</h2>
+                </div>
+
+                <div class="grid-2col">
+                    <!-- Add marks Form -->
+                    <div class="card">
+                        <div class="card-title"><span>Enter Academic Marks & Attendance</span></div>
+                        <form id="admin-add-marks-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Select Semester</label>
+                                    <select id="marks-sem-select" class="form-control" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Subject Code</label>
+                                    <input type="text" id="marks-sub-code" class="form-control"
+                                        placeholder="e.g. TCS601" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Subject Name</label>
+                                    <input type="text" id="marks-sub-name" class="form-control"
+                                        placeholder="Compiler Design" required>
+                                </div>
+                            </div>
+                            <div class="form-grid dense">
+                                <div class="form-group">
+                                    <label>Sessional I (30)</label>
+                                    <input type="number" id="marks-sess1" class="form-control" min="0" max="30">
+                                </div>
+                                <div class="form-group">
+                                    <label>Sessional II (30)</label>
+                                    <input type="number" id="marks-sess2" class="form-control" min="0" max="30">
+                                </div>
+                                <div class="form-group">
+                                    <label>PUT Marks (50)</label>
+                                    <input type="number" id="marks-put" class="form-control" min="0" max="50">
+                                </div>
+                            </div>
+                            <div class="form-grid dense">
+                                <div class="form-group">
+                                    <label>Internal (50)</label>
+                                    <input type="number" id="marks-internal" class="form-control" min="0" max="50">
+                                </div>
+                                <div class="form-group">
+                                    <label>External (100)</label>
+                                    <input type="number" id="marks-external" class="form-control" min="0" max="100">
+                                </div>
+                                <div class="form-group">
+                                    <label>Max Marks</label>
+                                    <input type="number" id="marks-total" class="form-control" value="100">
+                                </div>
+                            </div>
+
+                            <h4 style="margin: 1.5rem 0 1rem 0; color: var(--primary-light);">Override Overalls
+                                (Optional)</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>SGPA SGPA / GPA Override</label>
+                                    <input type="number" step="0.01" id="marks-gpa-override" class="form-control"
+                                        placeholder="e.g. 8.45">
+                                </div>
+                                <div class="form-group">
+                                    <label>Attendance % Override</label>
+                                    <input type="number" step="0.1" id="marks-att-override" class="form-control"
+                                        placeholder="e.g. 88.5">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Academic
+                                Record</button>
+                        </form>
+                    </div>
+
+                    <!-- Add Backlogs / Disciplinary -->
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="card">
+                            <div class="card-title"><span>Record Backlog</span></div>
+                            <form id="admin-add-backlog-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Semester</label>
+                                        <select id="backlog-sem-select" class="form-control">
+                                            <option value="Sem 1">Sem 1</option>
+                                            <option value="Sem 2">Sem 2</option>
+                                            <option value="Sem 3">Sem 3</option>
+                                            <option value="Sem 4">Sem 4</option>
+                                            <option value="Sem 5">Sem 5</option>
+                                            <option value="Sem 6">Sem 6</option>
+                                            <option value="Sem 7">Sem 7</option>
+                                            <option value="Sem 8">Sem 8</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Subject Code</label>
+                                        <input type="text" id="backlog-sub-code" class="form-control"
+                                            placeholder="TCS301" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date Cleared (Optional)</label>
+                                    <input type="date" id="backlog-clear-date" class="form-control">
+                                </div>
+                                <button type="submit" class="btn btn-danger">Log Backlog Record</button>
+                            </form>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-title"><span>Disciplinary / Adverse Remarks</span></div>
+                            <form id="admin-add-adverse-form">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <input type="date" id="adverse-date" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Outcome</label>
+                                        <input type="text" id="adverse-outcome" class="form-control"
+                                            placeholder="Suspended / Warning letter issued" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Incident Details</label>
+                                    <textarea id="adverse-details" class="form-control" style="height: 60px;"
+                                        placeholder="Write specific details..." required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Counseling / Action Taken</label>
+                                    <input type="text" id="adverse-action" class="form-control"
+                                        placeholder="Counseled by Mentor & parents informed">
+                                </div>
+                                <button type="submit" class="btn btn-secondary"
+                                    style="width: 100%; justify-content: center;">Log Incident</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Student Marks Record preview -->
+                <div id="admin-student-marks-container" style="margin-top: 1.5rem;">
+                    <!-- Semester Marks Cards generated dynamically -->
+                </div>
+            </div>
+
+            <!-- ADMIN MANAGE BASE VIEW (Placeholder view linked to Sidebar Nav) -->
+            <div id="admin-manage" class="view-section">
+                <!-- Routed automatically to admin-dashboard grid search, just standard linking -->
+            </div>
+
+            <!-- ACADEMIC FACULTY MANAGEMENT VIEW -->
+            <div id="faculty-manage" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Academic Faculty Management Portal</h2>
+                </div>
+
+                <div class="alert-info-box"
+                    style="background: rgba(2, 132, 199, 0.08); border-left: 4px solid #0284c7; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <div>
+                        <strong style="color: #0284c7;">Academic Faculty Access Enabled:</strong> You have exclusive
+                        permission to manage semester marks (Sessional I & II, PUT, Internal/External, Totals,
+                        Aggregates), Backlog records, and official Academic Results.
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-title"><span>Select Student & Semester</span></div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="faculty-student-select">Select Student</label>
+                            <select id="faculty-student-select" class="form-control">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="faculty-sem-select">Select Semester</label>
+                            <select id="faculty-sem-select" class="form-control">
+                                <option value="Sem 1">Sem 1</option>
+                                <option value="Sem 2">Sem 2</option>
+                                <option value="Sem 3">Sem 3</option>
+                                <option value="Sem 4">Sem 4</option>
+                                <option value="Sem 5">Sem 5</option>
+                                <option value="Sem 6">Sem 6</option>
+                                <option value="Sem 7">Sem 7</option>
+                                <option value="Sem 8">Sem 8</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Marks Form -->
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-title"><span>Enter / Update Academic Marks & Backlogs</span></div>
+                    <form id="form-faculty-marks">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fac-subject-code">Subject Code</label>
+                                <input type="text" id="fac-subject-code" class="form-control" placeholder="e.g. TCS601"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-subject-name">Subject Name</label>
+                                <input type="text" id="fac-subject-name" class="form-control"
+                                    placeholder="e.g. Compiler Design" required>
+                            </div>
+                        </div>
+
+                        <div class="form-grid dense">
+                            <div class="form-group">
+                                <label for="fac-sessional1">Sessional I (30)</label>
+                                <input type="number" id="fac-sessional1" class="form-control" min="0" max="30"
+                                    placeholder="26">
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-sessional2">Sessional II (30)</label>
+                                <input type="number" id="fac-sessional2" class="form-control" min="0" max="30"
+                                    placeholder="27">
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-put">PUT Marks (50)</label>
+                                <input type="number" id="fac-put" class="form-control" min="0" max="50"
+                                    placeholder="44">
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-internal">Internal Marks (50)</label>
+                                <input type="number" id="fac-internal" class="form-control" min="0" max="50"
+                                    placeholder="43">
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-external">External Marks (50)</label>
+                                <input type="number" id="fac-external" class="form-control" min="0" max="50"
+                                    placeholder="51">
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-obtained">Total Obtained</label>
+                                <input type="number" id="fac-obtained" class="form-control" min="0" max="100"
+                                    placeholder="94">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fac-sem-gpa">Semester GPA / SGPA</label>
+                                <input type="number" id="fac-sem-gpa" class="form-control" step="0.01" min="0" max="10"
+                                    placeholder="8.45">
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-sem-attendance">Semester Attendance %</label>
+                                <input type="number" id="fac-sem-attendance" class="form-control" step="0.1" min="0"
+                                    max="100" placeholder="88.5">
+                            </div>
+                            <div class="form-group">
+                                <label for="fac-backlog-status">Backlog Status / Clearing Date</label>
+                                <input type="text" id="fac-backlog-status" class="form-control"
+                                    placeholder="Cleared / Active Backlog / None">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Official Academic
+                            Record</button>
+                    </form>
+                </div>
+
+                <!-- Display Records for selected student & semester -->
+                <div class="card">
+                    <div class="card-title"><span>Official Semester Grade Sheet</span></div>
+                    <div id="faculty-grade-sheet-container" class="records-list">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- 2.4 ADMIN INVITE LINKS MANAGEMENT -->
+            <!-- ============================================ -->
+            <div id="admin-invite-links" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Student Self-Registration Invites</h2>
+                </div>
+
+                <div class="alert-info-box" style="background: rgba(15, 58, 122, 0.06); border-left: 4px solid #0f3a7a; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f3a7a" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <div>
+                        <strong>Batch Invite Generator:</strong> Feed up to 20 student email addresses at a time. The system will create unique single-use tokens and automatically email invitation links to each recipient.
+                    </div>
+                </div>
+
+                <!-- Generate Batch Invites Form -->
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-title"><span>Feed Student Email Addresses (Max 20)</span></div>
+                    <form id="form-generate-batch-links">
+                        <div class="form-group">
+                            <label for="batch-email-input">Student Emails (one per line or comma-separated) *</label>
+                            <textarea id="batch-email-input" class="form-control" rows="5" placeholder="student1@example.com&#10;student2@example.com&#10;student3@example.com" required style="font-family: monospace; font-size: 13px;"></textarea>
+                            <small style="color: var(--text-muted); font-size: 12px; display: block; margin-top: 4px;">
+                                You can enter up to 20 email addresses. Optionally format as "Name &lt;email&gt;" or just "email@domain.com".
+                            </small>
+                        </div>
+
+                        <div class="form-group" style="max-width: 260px; margin-bottom: 0;">
+                            <label for="batch-expires-days">Link Validity (Days)</label>
+                            <input type="number" id="batch-expires-days" class="form-control" min="1" max="30" value="7">
+                        </div>
+
+                        <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end; gap: 10px;">
+                            <button type="submit" id="btn-submit-batch-links" class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                                <span>Generate Links & Send Invites</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Batch Generation Results Container (Shown after generation) -->
+                <div id="batch-results-panel" class="card" style="display: none; margin-bottom: 1.5rem; border: 1.5px solid #10b981;">
+                    <div class="card-title" style="color: #065f46;">
+                        <span>✅ Generated Invitation Links</span>
+                        <button type="button" class="btn btn-secondary" style="font-size: 12px; padding: 4px 8px;" onclick="document.getElementById('batch-results-panel').style.display='none'">Dismiss</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Recipient Email</th>
+                                    <th>Registration Link</th>
+                                    <th>Email Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batch-results-tbody">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- All Issued Registration Tokens Table -->
+                <div class="card">
+                    <div class="card-title">
+                        <span>Issued Registration Tokens</span>
+                        <button type="button" id="btn-refresh-tokens" class="btn btn-secondary" style="font-size: 12px; padding: 4px 10px;">
+                            🔄 Refresh
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Assigned Recipient</th>
+                                    <th>Registration URL</th>
+                                    <th>Uses</th>
+                                    <th>Email Delivery</th>
+                                    <th>Expires At</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tokens-list-tbody">
+                                <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Loading tokens…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+            <!-- 2.5 ADMIN PENDING REGISTRATIONS APPROVAL QUEUE -->
+            <!-- ============================================ -->
+            <div id="admin-pending-registrations" class="view-section">
+                <div class="section-header">
+                    <h2 class="section-title">Pending Student Registrations Queue</h2>
+                </div>
+
+                <div class="analytics-panel" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem;">
+                    <div class="analytics-card">
+                        <div id="pending-reg-count" class="analytics-value" style="color: #ea580c;">0</div>
+                        <div class="analytics-label">Awaiting Admin Approval</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div id="pending-reg-approved-today" class="analytics-value" style="color: #10b981;">0</div>
+                        <div class="analytics-label">Approved (All Time)</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <span>Verified Applicants Awaiting Approval</span>
+                        <div style="display: flex; gap: 8px;">
+                            <select id="pending-reg-filter-status" class="form-control" style="width: 180px; padding: 4px 8px; font-size: 13px;">
+                                <option value="PENDING_APPROVAL">Pending Approval</option>
+                                <option value="APPROVED">Approved</option>
+                                <option value="REJECTED">Rejected</option>
+                                <option value="">All Statuses</option>
+                            </select>
+                            <button type="button" id="btn-refresh-pending-reg" class="btn btn-secondary" style="font-size: 12px; padding: 4px 10px;">
+                                🔄 Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Applicant Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>OTP Verified</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pending-reg-tbody">
+                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading pending registrations…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HOD / ADMIN SECTION ALLOTMENT -->
+            <div id="hod-section-allotment" class="view-section">
+                <div class="section-header">
+                    <div>
+                        <h2 id="allotment-page-title" class="section-title">Student Section Allotment</h2>
+                        <p id="allotment-page-subtitle" style="color: var(--text-muted); font-size: 13px; margin-top: 2px;">Manage and allot verified students with completed profiles to their respective sections</p>
+                    </div>
+                </div>
+
+                <!-- KPI stats -->
+                <div class="analytics-panel" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem;">
+                    <div class="analytics-card">
+                        <div id="allotment-stat-pending" class="analytics-value" style="color: #ea580c;">0</div>
+                        <div class="analytics-label">Pending Allotment (Details Filled)</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div id="allotment-stat-allotted" class="analytics-value" style="color: #10b981;">0</div>
+                        <div class="analytics-label">Sections Allotted</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div id="allotment-stat-uncompleted" class="analytics-value" style="color: #64748b;">0</div>
+                        <div class="analytics-label">Pending Profile Submission</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div id="allotment-stat-total" class="analytics-value" style="color: var(--primary-light, #2563eb);">0</div>
+                        <div class="analytics-label">Total Registered Students</div>
+                    </div>
+                </div>
+
+                <!-- Main Card -->
+                <div class="card">
+                    <!-- Filters Toolbar -->
+                    <div class="card-title" style="flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <span style="font-weight: 600;">Student Allotment Queue</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                            <input type="text" id="allotment-search-input" class="form-control" placeholder="🔍 Search Name / Roll No / Email…" style="width: 220px; padding: 6px 10px; font-size: 13px;">
+                            <select id="allotment-filter-status" class="form-control" style="width: 200px; padding: 6px 10px; font-size: 13px;">
+                                <option value="pending">⏳ Pending Allotment (Completed)</option>
+                                <option value="allotted">✅ Allotted Students</option>
+                                <option value="uncompleted">📝 Awaiting Profile Fill</option>
+                                <option value="all">📋 All Students</option>
+                            </select>
+                            <select id="allotment-filter-semester" class="form-control" style="width: 130px; padding: 6px 10px; font-size: 13px;">
+                                <option value="">All Semesters</option>
+                                <option value="Sem 1">Sem 1</option>
+                                <option value="Sem 2">Sem 2</option>
+                                <option value="Sem 3">Sem 3</option>
+                                <option value="Sem 4">Sem 4</option>
+                                <option value="Sem 5">Sem 5</option>
+                                <option value="Sem 6">Sem 6</option>
+                                <option value="Sem 7">Sem 7</option>
+                                <option value="Sem 8">Sem 8</option>
+                            </select>
+                            <button type="button" id="btn-refresh-allotment" class="btn btn-secondary" style="font-size: 13px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                🔄 Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Allotment Action Bar -->
+                    <div id="allotment-bulk-bar" style="background: var(--bg-main, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); border-radius: 8px; padding: 12px 16px; margin: 12px 0 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span id="allotment-selected-count" style="font-size: 13px; font-weight: 600; background: #e0e7ff; color: #3730a3; padding: 4px 10px; border-radius: 20px;">
+                                0 students selected
+                            </span>
+                            <span style="font-size: 13px; color: var(--text-muted);">Select students using the checkboxes below to allot them in batch.</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <label for="allotment-target-section" style="font-size: 13px; font-weight: 500; margin-bottom: 0;">Target Section:</label>
+                            <select id="allotment-target-section" class="form-control" style="width: 140px; padding: 6px 10px; font-size: 13px; font-weight: 600;">
+                                <option value="A">Section A</option>
+                                <option value="B">Section B</option>
+                                <option value="C">Section C</option>
+                                <option value="D">Section D</option>
+                                <option value="E">Section E</option>
+                                <option value="F">Section F</option>
+                            </select>
+                            <button type="button" id="btn-bulk-allot-section" class="btn btn-primary" disabled style="font-size: 13px; padding: 6px 16px; display: inline-flex; align-items: center; gap: 6px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="8.5" cy="7" r="4"></circle>
+                                    <polyline points="17 11 19 13 23 9"></polyline>
+                                </svg>
+                                <span>Allot Section to Selected</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-container">
+                        <table class="table" id="allotment-students-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px; text-align: center;">
+                                        <input type="checkbox" id="allotment-select-all" style="cursor: pointer; width: 16px; height: 16px;" title="Select All">
+                                    </th>
+                                    <th>Roll No</th>
+                                    <th>Student Name & Email</th>
+                                    <th>Program / Branch</th>
+                                    <th>Semester</th>
+                                    <th>Profile Status</th>
+                                    <th>Current Section</th>
+                                    <th>Quick Allot</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allotment-students-tbody">
+                                <tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading allotment queue…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- 3. MODALS FOR ADDING STUDENT ACTIVITIES -->
+    <!-- ============================================ -->
+
+    <!-- Hobby Modal -->
+    <div id="modal-hobby" class="modal-backdrop">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Hobby & Interests Details</h3>
+                <button type="button" class="modal-close">&times;</button>
+            </div>
+            <form id="form-add-hobby">
+                <div class="form-group">
+                    <label for="add-hobby-name">Hobby Name</label>
+                    <input type="text" id="add-hobby-name" class="form-control" placeholder="e.g. Photography / Chess"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="add-hobby-details">Participation details</label>
+                    <input type="text" id="add-hobby-details" class="form-control"
+                        placeholder="e.g. Participated in Annual Youth Fest" required>
+                </div>
+                <div class="form-group">
+                    <label for="add-hobby-award">Awards Won (If any)</label>
+                    <input type="text" id="add-hobby-award" class="form-control"
+                        placeholder="e.g. 1st Prize / Certificate of Merit">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-hobby')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Hobby</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Certification Modal -->
+    <div id="modal-cert" class="modal-backdrop">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Certification</h3>
+                <button type="button" class="modal-close">&times;</button>
+            </div>
+            <form id="form-add-cert">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="add-cert-sem">Semester</label>
+                        <select id="add-cert-sem" class="form-control">
+                            <option value="Sem 1">Sem 1</option>
+                            <option value="Sem 2">Sem 2</option>
+                            <option value="Sem 3">Sem 3</option>
+                            <option value="Sem 4">Sem 4</option>
+                            <option value="Sem 5">Sem 5</option>
+                            <option value="Sem 6">Sem 6</option>
+                            <option value="Sem 7">Sem 7</option>
+                            <option value="Sem 8">Sem 8</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-cert-duration">Duration</label>
+                        <input type="text" id="add-cert-duration" class="form-control" placeholder="e.g. 6 Weeks"
+                            required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="add-cert-program">Program / Course Name</label>
+                    <input type="text" id="add-cert-program" class="form-control"
+                        placeholder="e.g. AWS Cloud Practitioner" required>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="add-cert-mode">Mode</label>
+                        <select id="add-cert-mode" class="form-control">
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-cert-grade">Grade / Score</label>
+                        <input type="text" id="add-cert-grade" class="form-control" placeholder="e.g. A+ or 90%"
+                            required>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-cert')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Certificate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Internship Modal -->
+    <div id="modal-internship" class="modal-backdrop">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Internship Details</h3>
+                <button type="button" class="modal-close">&times;</button>
+            </div>
+            <form id="form-add-internship">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="add-intern-date">Drive Date</label>
+                        <input type="date" id="add-intern-date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-intern-company">Company Name</label>
+                        <input type="text" id="add-intern-company" class="form-control" placeholder="e.g. Google India"
+                            required>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="add-intern-mode">Drive Type</label>
+                        <select id="add-intern-mode" class="form-control">
+                            <option value="On Campus">On Campus</option>
+                            <option value="Off Campus">Off Campus</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-intern-outcome">Outcome</label>
+                        <select id="add-intern-outcome" class="form-control">
+                            <option value="Selected">Selected</option>
+                            <option value="Awaited">Result Awaited</option>
+                            <option value="Appeared">Appeared Only</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="add-intern-role">Designation</label>
+                        <input type="text" id="add-intern-role" class="form-control"
+                            placeholder="e.g. Software Engineer Intern" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-intern-project">Project Title</label>
+                        <input type="text" id="add-intern-project" class="form-control"
+                            placeholder="e.g. Machine Learning Classifier" required>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="add-intern-guide-ext">External Guide</label>
+                        <input type="text" id="add-intern-guide-ext" class="form-control"
+                            placeholder="e.g. Mr. Rajesh Dev (Tech Lead)">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-intern-guide-int">Internal Guide (Faculty)</label>
+                        <input type="text" id="add-intern-guide-int" class="form-control"
+                            placeholder="e.g. Dr. Amit Sharma">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('modal-internship')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Approve Student Registration -->
+    <div id="modal-approve-registration" class="modal-backdrop">
+        <div class="modal" style="max-width: 550px;">
+            <div class="modal-header">
+                <h3>Approve Student Registration & Enroll</h3>
+                <button type="button" class="modal-close" onclick="closeModal('modal-approve-registration')">&times;</button>
+            </div>
+            <div style="background: rgba(16, 185, 129, 0.08); border-left: 4px solid #10b981; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 13px;">
+                Approving this applicant will create their <strong>MENTEE</strong> account and send a <strong>temporary password</strong> directly to their email address.
+            </div>
+            <form id="form-approve-registration">
+                <input type="hidden" id="approve-reg-id">
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 12px;">
+                    <div>
+                        <small style="color: var(--text-muted); display: block;">Applicant Name</small>
+                        <strong id="approve-display-name" style="font-size: 14px;">-</strong>
+                    </div>
+                    <div>
+                        <small style="color: var(--text-muted); display: block;">Email Address</small>
+                        <strong id="approve-display-email" style="font-size: 14px;">-</strong>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="approve-roll-no">Assign Roll Number / Student ID *</label>
+                    <input type="text" id="approve-roll-no" class="form-control" placeholder="e.g. 230101050" required>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="approve-course">Course *</label>
+                        <select id="approve-course" class="form-control" required>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="BCA">BCA</option>
+                            <option value="MCA">MCA</option>
+                            <option value="BBA">BBA</option>
+                            <option value="MBA">MBA</option>
+                            <option value="Diploma">Diploma</option>
+                            <option value="B.Sc">B.Sc</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="approve-branch">Branch / Department *</label>
+                        <select id="approve-branch" class="form-control" required>
+                            <option value="CSE">CSE</option>
+                            <option value="AIML">AIML</option>
+                            <option value="IT">IT</option>
+                            <option value="ECE">ECE</option>
+                            <option value="ME">ME</option>
+                            <option value="CE">CE</option>
+                            <option value="Management">Management</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="approve-semester">Semester</label>
+                        <select id="approve-semester" class="form-control">
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="3">3rd Semester</option>
+                            <option value="4">4th Semester</option>
+                            <option value="5">5th Semester</option>
+                            <option value="6">6th Semester</option>
+                            <option value="7">7th Semester</option>
+                            <option value="8">8th Semester</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="approve-admission-year">Admission Year</label>
+                        <input type="number" id="approve-admission-year" class="form-control" value="2026" min="2020" max="2035">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="approve-admin-notes">Admin Notes (Optional)</label>
+                    <textarea id="approve-admin-notes" class="form-control" rows="2" placeholder="e.g. Verified 10+2 documents and identity."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-approve-registration')">Cancel</button>
+                    <button type="submit" id="btn-confirm-approve-reg" class="btn btn-primary" style="background: #10b981; border-color: #10b981;">
+                        <span>Approve & Send Credentials Email</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmation Dialog for Generating & Sending Batch Invites -->
+    <div id="modal-confirm-send-invites" class="modal-backdrop" style="backdrop-filter: blur(8px); background: rgba(15, 23, 42, 0.65);">
+        <div class="modal" style="max-width: 500px; padding: 24px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);">
+            <div class="modal-header" style="margin-bottom: 16px; padding-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(15, 58, 122, 0.1); color: var(--primary-color, #0f3a7a); display: flex; align-items: center; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </div>
+                    <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-color, #0f172a);">Confirm Invitation Dispatch</h3>
+                </div>
+                <button type="button" class="modal-close" onclick="closeModal('modal-confirm-send-invites')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-muted, #64748b); font-size: 14px; margin-bottom: 14px; line-height: 1.5;">
+                    You are about to generate unique single-use registration links for <strong id="confirm-invite-count" style="color: var(--primary-color, #0f3a7a);">0 recipient(s)</strong>:
+                </p>
+                <div id="confirm-invite-recipient-list" style="max-height: 150px; overflow-y: auto; background: var(--bg-main, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); border-radius: 8px; padding: 10px 12px; font-size: 13px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px;">
+                    <!-- Injected dynamically -->
+                </div>
+                <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: #1e40af; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <div>
+                        Link Validity: <strong id="confirm-invite-validity">7 days</strong> &bull; Notification: <strong>Direct Email to each recipient</strong>
+                    </div>
+                </div>
+                <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-confirm-send-invites')">Cancel</button>
+                    <button type="button" id="btn-confirm-send-invites" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        <span>Confirm & Send Invites</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmation Dialog for Bulk Section Allotment -->
+    <div id="modal-confirm-allot-section" class="modal-backdrop" style="backdrop-filter: blur(8px); background: rgba(0,0,0,0.65);">
+        <div class="modal" style="max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.1);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-color, #e2e8f0); padding-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(37, 99, 235, 0.1); color: #2563eb; display: flex; align-items: center; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <polyline points="17 11 19 13 23 9"></polyline>
+                        </svg>
+                    </div>
+                    <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--text-color, #0f172a);">Confirm Section Allotment</h3>
+                </div>
+                <button type="button" class="modal-close" onclick="closeModal('modal-confirm-allot-section')">&times;</button>
+            </div>
+            <div class="modal-body" style="padding-top: 14px;">
+                <p style="color: var(--text-muted, #64748b); font-size: 14px; margin-bottom: 14px; line-height: 1.5;">
+                    You are about to assign <strong id="confirm-allot-student-count" style="color: #2563eb;">0 student(s)</strong> to:
+                </p>
+                <div style="background: rgba(37, 99, 235, 0.08); border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; text-align: center;">
+                    <span style="font-size: 13px; color: #1e40af; display: block; font-weight: 500;">Assigned Section</span>
+                    <span id="confirm-allot-target-section-badge" style="font-size: 22px; font-weight: 800; color: #1d4ed8; letter-spacing: 0.5px;">Section A</span>
+                </div>
+                <div id="confirm-allot-student-names" style="max-height: 130px; overflow-y: auto; background: var(--bg-main, #f8fafc); border: 1px solid var(--border-color, #e2e8f0); border-radius: 8px; padding: 10px 12px; font-size: 12.5px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 4px;">
+                    <!-- Injected dynamically -->
+                </div>
+                <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-confirm-allot-section')">Cancel</button>
+                    <button type="button" id="btn-confirm-allot-submit" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <span>Confirm & Allot Section</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Confirm Student Deletion / Removal -->
+    <div id="modal-confirm-delete-student" class="modal-backdrop" style="backdrop-filter: blur(8px); background: rgba(0,0,0,0.65);">
+        <div class="modal" style="max-width: 440px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border-color, #e2e8f0); padding-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(239, 68, 68, 0.1); color: #ef4444; display: flex; align-items: center; justify-content: center;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                    </div>
+                    <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #dc2626;">Permanently Remove Student</h3>
+                </div>
+                <button type="button" class="modal-close" onclick="closeModal('modal-confirm-delete-student')">&times;</button>
+            </div>
+            <div class="modal-body" style="padding-top: 14px;">
+                <p style="color: var(--text-color, #0f172a); font-size: 14px; margin-bottom: 12px; line-height: 1.5;">
+                    Are you sure you want to permanently delete <strong id="delete-student-name" style="color: #dc2626;">Student Name</strong> (<span id="delete-student-roll" style="font-family: monospace;">Roll No</span>)?
+                </p>
+                <div style="background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 6px; padding: 10px 12px; margin-bottom: 16px; font-size: 12.5px; color: #991b1b; line-height: 1.4;">
+                    ⚠️ <strong>Warning:</strong> This will delete their student profile, login account credentials, academic logs, and session records permanently. This action cannot be undone.
+                </div>
+                <input type="hidden" id="delete-student-id-val">
+                <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modal-confirm-delete-student')">Cancel</button>
+                    <button type="button" id="btn-confirm-delete-student-submit" class="btn" style="background: #dc2626; color: #ffffff; border: none; font-weight: 600; padding: 8px 16px; border-radius: 6px;">
+                        <span>Delete Student Record</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Forced Password Change on First Login -->
+    <div id="modal-force-password-change" class="modal-backdrop" style="backdrop-filter: blur(8px); background: rgba(0,0,0,0.7);">
+        <div class="modal" style="max-width: 460px;">
+            <div class="modal-header">
+                <h3>🔒 Set Your Permanent Password</h3>
+            </div>
+            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 6px; margin-bottom: 18px; font-size: 13px; color: #92400e;">
+                Welcome to Haridwar University! You are currently using a temporary password. Please choose a new permanent password (minimum 8 characters) to secure your account.
+            </div>
+            <form id="form-force-password-change">
+                <div class="form-group">
+                    <label for="force-current-password">Current Temporary Password *</label>
+                    <input type="password" id="force-current-password" class="form-control" placeholder="Enter password from email" required>
+                </div>
+                <div class="form-group">
+                    <label for="force-new-password">New Password * (min 8 chars)</label>
+                    <input type="password" id="force-new-password" class="form-control" minlength="8" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label for="force-confirm-password">Confirm New Password *</label>
+                    <input type="password" id="force-confirm-password" class="form-control" minlength="8" placeholder="••••••••" required>
+                </div>
+                <div id="force-password-error" style="display: none; color: #ef4444; font-size: 13px; margin-bottom: 12px;"></div>
+                <div class="modal-actions" style="justify-content: flex-end;">
+                    <button type="submit" id="btn-submit-force-password" class="btn btn-primary" style="width: 100%;">
+                        <span>Update Password & Continue to Portal</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Files -->
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Full-screen Loading Overlay (shown during API calls) -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader-spinner"></div>
+        <p id="loading-message" class="loader-text">Connecting to Google Sheets…</p>
+    </div>
+
+</body>
+
+</html>
