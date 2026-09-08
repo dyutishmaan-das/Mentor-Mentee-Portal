@@ -86,7 +86,7 @@ async function dispatchEmail({ to, subject, html, text, category = 'notification
         resendError.includes('verify a domain') ||
         resendError.includes('only send testing emails')
     )) {
-        friendlyError = `Resend Free Sandbox Restriction: Unverified sender 'onboarding@resend.dev' can only send emails to the account owner (dyutishwork@gmail.com). To send emails to all student addresses, configure SMTP in .env (e.g. Gmail App Password) or verify a domain in Resend.`;
+        friendlyError = `Resend Free Sandbox Restriction: Unverified sender 'onboarding@resend.dev' can only send emails to the account owner. To send emails to all student addresses, configure SMTP in .env (e.g. Gmail App Password) or verify a domain in Resend.`;
     }
 
     console.error(`[EmailService] ❌ Dispatch failed for ${to}: ${friendlyError}`);

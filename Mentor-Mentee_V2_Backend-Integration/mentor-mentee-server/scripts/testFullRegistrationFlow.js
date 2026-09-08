@@ -19,7 +19,7 @@ async function runTest() {
     console.log('--- Starting Full Student Registration Flow Verification ---');
     await connectDB();
 
-    const testEmail = 'dyutishwork@gmail.com';
+    const testEmail = 'student.flow.test@university.edu';
     const testRollNo = `TEST_${Date.now()}`;
 
     // Clean up any prior test records for this email and roll number
