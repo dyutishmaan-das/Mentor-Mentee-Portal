@@ -94,13 +94,9 @@ app.get(
 const uploadsPath = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsPath));
 
-// Serve assets folder (images, logos, etc.)
-const assetsPath = path.join(__dirname, '..', 'Mentor-Mentee_V1', 'assets');
-app.use('/assets', express.static(assetsPath));
-
 // Serve the frontend client as static files.
-// The client directory is at ../Mentor-Mentee_V1/client
-const clientPath = path.join(__dirname, '..', 'Mentor-Mentee_V1', 'client');
+// The client directory is at ../client
+const clientPath = path.join(__dirname, '..', 'client');
 app.use(express.static(clientPath));
 
 // 404 handler - must be after all routes

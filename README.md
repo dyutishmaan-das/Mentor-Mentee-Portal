@@ -40,7 +40,7 @@ An institutional-grade pair programming and academic mentoring management system
 
 ### 1. Backend Server Setup
 ```bash
-cd Mentor-Mentee_V2_Backend-Integration/mentor-mentee-server
+cd server
 npm install
 cp .env.example .env
 # Configure MONGO_URI, JWT secrets, and SMTP credentials in .env
@@ -49,9 +49,9 @@ npm run dev
 
 ### 2. Frontend Client Setup
 The frontend runs as a modern, decoupled Single Page Application (SPA).
-Serve the frontend directory via static server or live server:
+Serve the frontend directory via static server or live server (or access directly via `http://localhost:5000` when the backend server is running):
 ```bash
-cd Mentor-Mentee_V2_Backend-Integration/Mentor-Mentee_V1/client
+cd client
 # Open index.html in your browser or run a static file server:
 npx serve .
 ```
@@ -63,16 +63,16 @@ npx serve .
 The backend includes comprehensive end-to-end integration and isolation test suites:
 ```bash
 # 1. Test HOD Department Isolation & Admin Global Access
-node Mentor-Mentee_V2_Backend-Integration/mentor-mentee-server/scripts/test_hod_department_isolation.js
+node server/scripts/test_hod_department_isolation.js
 
 # 2. Test Deactivation & Permanent Cascading Deletion
-node Mentor-Mentee_V2_Backend-Integration/mentor-mentee-server/scripts/test_deactivate_and_remove_student.js
+node server/scripts/test_deactivate_and_remove_student.js
 
 # 3. Test Full Section Allotment Pipeline
-node Mentor-Mentee_V2_Backend-Integration/mentor-mentee-server/scripts/test_section_allotment_full_cycle.js
+node server/scripts/test_section_allotment_full_cycle.js
 
 # 4. Test Complete Student Invite & Registration Flow
-node Mentor-Mentee_V2_Backend-Integration/mentor-mentee-server/scripts/testFullRegistrationFlow.js
+node server/scripts/testFullRegistrationFlow.js
 ```
 
 ---
