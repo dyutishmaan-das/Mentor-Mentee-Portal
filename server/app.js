@@ -94,15 +94,6 @@ app.use(
     })
 );
 
-app.get('/', (req, res) => {
-    res.json({
-        success: true,
-        message: 'Mentor-Mentee API Server is running',
-        health: '/api/health',
-        timestamp: new Date().toISOString(),
-    });
-});
-
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/sessions', sessionRoutes);
@@ -146,6 +137,16 @@ const clientPath = path.join(__dirname, '..', 'client');
 if (fs.existsSync(clientPath)) {
     app.use(express.static(clientPath));
 }
+
+// Fallback root endpoint (for headless / Vercel cloud serverless deployments)
+app.get('/', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Mentor-Mentee API Server is running',
+        health: '/api/health',
+        timestamp: new Date().toISOString(),
+    });
+});
 
 // 404 handler - must be after all routes
 app.use(notFound);
