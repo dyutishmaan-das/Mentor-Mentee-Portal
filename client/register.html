@@ -513,7 +513,22 @@
 
     <!-- Client Script -->
     <script>
-        const API_BASE = '/api';
+        const getApiBase = () => {
+            const custom = localStorage.getItem('mm_backend_api_url');
+            if (custom) return custom.replace(/\/+$/, '');
+
+            const hostname = window.location.hostname;
+            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                if (window.location.port && window.location.port !== '5000') {
+                    return 'http://localhost:5000/api';
+                }
+                return '/api';
+            }
+
+            return 'https://mentor-mentee-portal-server.vercel.app/api';
+        };
+
+        const API_BASE = getApiBase();
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         const prefilledEmail = urlParams.get('email');

@@ -24,15 +24,37 @@ import registrationRoutes from './routes/registrationRoutes.js';
 import { authenticate } from './middleware/auth.js';
 import { authorize } from './middleware/authorize.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { connectDB } from './config/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    'https://dyutishmaan-das.github.io',
+    'http://localhost:5000',
+    'http://127.0.0.1:5500',
+    'http://localhost:3000',
+    'http://localhost:8080'
+].filter(Boolean);
+
 app.use(
     cors({
-        origin: process.env.CLIENT_URL,
+        origin: (origin, callback) => {
+            if (!origin) return callback(null, true);
+            if (
+                allowedOrigins.includes(origin) ||
+                origin.endsWith('.github.io') ||
+                origin.endsWith('.vercel.app') ||
+                origin.includes('localhost') ||
+                origin.includes('127.0.0.1')
+            ) {
+                return callback(null, true);
+            }
+            return callback(null, true);
+        },
         credentials: true,
     })
 );
@@ -42,6 +64,16 @@ app.use(
         contentSecurityPolicy: false,
     })
 );
+
+// Ensure MongoDB connection is established on all requests (for serverless environments)
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
 
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));

@@ -2,7 +2,23 @@
  * The UI remains vanilla JS; this module connects it to the College Management backend.
  */
 (() => {
-  const API_BASE = '/api';
+  const getApiBase = () => {
+    const custom = localStorage.getItem('mm_backend_api_url');
+    if (custom) return custom.replace(/\/+$/, '');
+
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      if (window.location.port && window.location.port !== '5000') {
+        return 'http://localhost:5000/api';
+      }
+      return '/api';
+    }
+
+    // Default live Vercel backend URL
+    return 'https://mentor-mentee-portal-server.vercel.app/api';
+  };
+
+  const API_BASE = getApiBase();
 
   const getToken = () => localStorage.getItem('mm_access_token');
   const setToken = (token) => token
@@ -18,11 +34,20 @@
     const token = getToken();
     if (token) headers.Authorization = `Bearer ${token}`;
 
-    let response = await fetch(`${API_BASE}${path}`, {
-      ...options,
-      headers,
-      credentials: 'include',
-    });
+    let response;
+    try {
+      response = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers,
+        credentials: 'include',
+      });
+    } catch (networkErr) {
+      const isRemote = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+      const msg = isRemote
+        ? `Cannot reach backend API at ${API_BASE}. Ensure your backend is deployed on Vercel.`
+        : `Cannot reach local backend server at ${API_BASE}. Ensure "npm start" is running.`;
+      throw new Error(msg);
+    }
 
     // Try one transparent access-token refresh when the API rejects an expired token.
     if (response.status === 401 && path !== '/auth/refresh') {
@@ -201,5 +226,14 @@
     getFile: (folder, filename) => `${API_BASE}/resources/file/${folder}/${filename}`,
 
     isAuthenticated: () => Boolean(getToken()),
+    setApiBaseUrl: (url) => {
+      if (url) {
+        localStorage.setItem('mm_backend_api_url', url);
+      } else {
+        localStorage.removeItem('mm_backend_api_url');
+      }
+      window.location.reload();
+    },
+    getApiBaseUrl: () => API_BASE,
   };
 })();
