@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 // Import routes
@@ -30,6 +31,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.set('trust proxy', 1);
 
 const allowedOrigins = [
     process.env.CLIENT_URL,
@@ -71,6 +74,7 @@ app.use(async (req, res, next) => {
         await connectDB();
         next();
     } catch (err) {
+        console.error('Database connection middleware error:', err.message);
         next(err);
     }
 });
@@ -89,6 +93,15 @@ app.use(
         legacyHeaders: false,
     })
 );
+
+app.get('/', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Mentor-Mentee API Server is running',
+        health: '/api/health',
+        timestamp: new Date().toISOString(),
+    });
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/students', studentRoutes);
@@ -122,14 +135,17 @@ app.get(
     }
 );
 
-// Serve uploaded files statically
+// Serve uploaded files statically if folder exists
 const uploadsPath = path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadsPath));
+if (fs.existsSync(uploadsPath)) {
+    app.use('/uploads', express.static(uploadsPath));
+}
 
-// Serve the frontend client as static files.
-// The client directory is at ../client
+// Serve the frontend client as static files when running locally
 const clientPath = path.join(__dirname, '..', 'client');
-app.use(express.static(clientPath));
+if (fs.existsSync(clientPath)) {
+    app.use(express.static(clientPath));
+}
 
 // 404 handler - must be after all routes
 app.use(notFound);
