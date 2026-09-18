@@ -6,31 +6,40 @@
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 import { fileURLToPath } from 'url';
 import { ApiError } from './errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Base upload directory
-const uploadDir = path.join(__dirname, '..', 'uploads');
+// Base upload directory (use os.tmpdir() on serverless / read-only environment)
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.LAMBDA_TASK_ROOT);
+const uploadDir = isServerless
+    ? path.join(os.tmpdir(), 'uploads')
+    : path.join(__dirname, '..', 'uploads');
 
-// Ensure upload directories exist
+// Ensure upload directories exist safely
 const createUploadDirs = () => {
-    const dirs = [
-        path.join(uploadDir, 'students'),
-        path.join(uploadDir, 'parents'),
-        path.join(uploadDir, 'guardians'),
-        path.join(uploadDir, 'faculty'),
-        path.join(uploadDir, 'documents'),
-        path.join(uploadDir, 'certificates'),
-    ];
+    try {
+        const dirs = [
+            uploadDir,
+            path.join(uploadDir, 'students'),
+            path.join(uploadDir, 'parents'),
+            path.join(uploadDir, 'guardians'),
+            path.join(uploadDir, 'faculty'),
+            path.join(uploadDir, 'documents'),
+            path.join(uploadDir, 'certificates'),
+        ];
 
-    dirs.forEach((dir) => {
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-    });
+        dirs.forEach((dir) => {
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+        });
+    } catch (err) {
+        console.warn('Upload directory initialization notice:', err.message);
+    }
 };
 
 createUploadDirs();

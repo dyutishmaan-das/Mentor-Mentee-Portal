@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-let isConnected = false;
+let cachedPromise = null;
 
 export async function connectDB() {
-    if (isConnected && mongoose.connection.readyState >= 1) {
-        return;
+    if (mongoose.connection.readyState === 1) {
+        return mongoose.connection;
     }
 
     const uri = process.env.MONGO_URI;
@@ -13,10 +13,21 @@ export async function connectDB() {
         throw new Error('MONGO_URI is not defined');
     }
 
-    await mongoose.connect(uri, {
-        bufferCommands: false,
-    });
+    if (!cachedPromise) {
+        cachedPromise = mongoose.connect(uri, {
+            serverSelectionTimeoutMS: 8000,
+        }).then((mongooseInstance) => {
+            console.log('MongoDB connected');
+            return mongooseInstance;
+        });
+    }
 
-    isConnected = true;
-    console.log('MongoDB connected');
+    try {
+        await cachedPromise;
+    } catch (err) {
+        cachedPromise = null;
+        throw err;
+    }
+
+    return mongoose.connection;
 }
