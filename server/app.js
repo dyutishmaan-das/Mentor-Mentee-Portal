@@ -43,6 +43,31 @@ const allowedOrigins = [
     'http://localhost:8080'
 ].filter(Boolean);
 
+// Explicit CORS Headers & Immediate Preflight (OPTIONS) Response
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin) {
+        const isAllowed = 
+            allowedOrigins.includes(origin) ||
+            origin.endsWith('.github.io') ||
+            origin.endsWith('.vercel.app') ||
+            origin.includes('localhost') ||
+            origin.includes('127.0.0.1');
+
+        if (isAllowed) {
+            res.setHeader('Access-Control-Allow-Origin', origin);
+            res.setHeader('Access-Control-Allow-Credentials', 'true');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+        }
+    }
+
+    if (req.method === 'OPTIONS') {
+        return res.status(204).end();
+    }
+    next();
+});
+
 app.use(
     cors({
         origin: (origin, callback) => {
@@ -61,6 +86,8 @@ app.use(
         credentials: true,
     })
 );
+
+app.options('*', cors());
 
 app.use(
     helmet({
