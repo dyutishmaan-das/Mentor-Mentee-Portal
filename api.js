@@ -14,8 +14,13 @@
       return '/api';
     }
 
-    // Default live Vercel backend URL
-    return 'https://mentor-mentee-portal-server.vercel.app/api';
+    // If running directly on Vercel, use same-origin relative '/api'
+    if (hostname.endsWith('.vercel.app')) {
+      return '/api';
+    }
+
+    // Default live Vercel backend URL for GitHub Pages & external clients
+    return 'https://mentor-mentee-portal-shaandyutishs-projects.vercel.app/api';
   };
 
   const API_BASE = getApiBase();
