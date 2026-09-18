@@ -525,7 +525,11 @@
                 return '/api';
             }
 
-            return 'https://mentor-mentee-portal-server.vercel.app/api';
+            if (hostname.endsWith('.vercel.app')) {
+                return '/api';
+            }
+
+            return 'https://mentor-mentee-portal-shaandyutishs-projects.vercel.app/api';
         };
 
         const API_BASE = getApiBase();
