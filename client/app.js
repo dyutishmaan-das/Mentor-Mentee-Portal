@@ -1393,19 +1393,42 @@ function renderStudentProfileForm(student) {
                 }
             } catch (err) {
                 console.warn('Profile complete endpoint notice:', err.message);
-                updated = await store.updateStudent(sid, updatedData);
+                try {
+                    updated = await store.updateStudent(sid, updatedData);
+                } catch (storeErr) {
+                    console.error('Store update fallback notice:', storeErr);
+                }
             }
-        } else {
-            updated = await store.updateStudent(sid, updatedData);
-        }
-        showToast('Profile details updated successfully');
-        
-        if (currentRole === 'student') {
-            currentUser = { ...currentUser, ...(updated || updatedData), profileCompleted: true };
+
+            try {
+                const freshRes = await MentorAPI.studentMe();
+                if (freshRes && freshRes.data) {
+                    updated = { ...(updated || {}), ...freshRes.data };
+                }
+            } catch (fetchErr) {
+                console.warn('Could not re-fetch profile:', fetchErr.message);
+            }
+
+            currentUser = { ...currentUser, ...updatedData, ...(updated || {}), profileCompleted: true };
+            if (sid) {
+                if (!store.db.students) store.db.students = {};
+                store.db.students[sid] = { ...(store.db.students[sid] || {}), ...currentUser };
+                store.save();
+            }
+            showToast('Profile details updated successfully');
             renderSidebar();
             renderStudentProfileForm(currentUser);
-        } else if (currentRole === 'mentor') {
-            renderStudentReviewPortal(sid);
+        } else {
+            updated = await store.updateStudent(sid, updatedData);
+            if (sid && updated) {
+                if (!store.db.students) store.db.students = {};
+                store.db.students[sid] = { ...(store.db.students[sid] || {}), ...updated };
+                store.save();
+            }
+            showToast('Profile details updated successfully');
+            if (currentRole === 'mentor') {
+                renderStudentReviewPortal(sid);
+            }
         }
     };
 }
