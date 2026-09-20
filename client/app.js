@@ -1211,15 +1211,24 @@ function renderOverviewCharts(student) {
 function renderStudentProfileForm(student) {
     populateDropdowns();
 
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val ?? '';
+    };
+    const getVal = (id, fallback = '') => {
+        const el = document.getElementById(id);
+        return el ? el.value : fallback;
+    };
+
     // Fill form inputs
-    document.getElementById('student-id-field').value = student.rollNo || student.id || '';
-    document.getElementById('student-name').value = student.name || '';
-    document.getElementById('student-email').value = student.email || '';
-    document.getElementById('student-course').value = student.course || 'B.Tech';
-    document.getElementById('student-branch').value = student.branch || 'Computer Science & Engineering';
-    document.getElementById('student-specialization').value = student.specialization || 'None';
-    document.getElementById('student-semester').value = student.semester || 'Sem 1';
-    document.getElementById('student-batch').value = student.batch || '2023-2027';
+    setVal('student-id-field', student.rollNo || student.id || '');
+    setVal('student-name', student.name || '');
+    setVal('student-email', student.email || '');
+    setVal('student-course', student.course || 'B.Tech');
+    setVal('student-branch', student.branch || 'Computer Science & Engineering');
+    setVal('student-specialization', student.specialization || 'None');
+    setVal('student-semester', student.semester || 'Sem 1');
+    setVal('student-batch', student.batch || '2023-2027');
     const sectionSelect = document.getElementById('student-section');
     if (sectionSelect) {
         if (student.section && student.section.trim()) {
@@ -1235,138 +1244,143 @@ function renderStudentProfileForm(student) {
             sectionSelect.value = '';
         }
     }
-    document.getElementById('student-category').value = student.category || 'General';
-    document.getElementById('student-dob').value = student.dob || '';
-    document.getElementById('student-blood').value = student.bloodGroup || 'A+';
-    document.getElementById('student-mark').value = student.identificationMark || '';
-    document.getElementById('student-phone1').value = student.mobile1 || '';
-    document.getElementById('student-phone2').value = student.mobile2 || '';
-    document.getElementById('student-addr-present').value = student.addressPresent || '';
-    document.getElementById('student-addr-perm').value = student.addressPermanent || '';
-    document.getElementById('student-siblings').value = student.siblingsCount || '0';
-    // Note: student-photo-url field was removed from UI, photos now uploaded via separate interface
-    document.getElementById('student-type').value = student.type || 'Day Scholar';
+    setVal('student-category', student.category || 'General');
+    setVal('student-dob', student.dob || '');
+    setVal('student-blood', student.bloodGroup || 'A+');
+    setVal('student-mark', student.identificationMark || '');
+    setVal('student-phone1', student.mobile1 || '');
+    setVal('student-phone2', student.mobile2 || '');
+    setVal('student-addr-present', student.addressPresent || '');
+    setVal('student-addr-perm', student.addressPermanent || '');
+    setVal('student-siblings', student.siblingsCount || '0');
+    setVal('student-type', student.type || 'Day Scholar');
 
     // Parent details
-    document.getElementById('parent-father-name').value = student.parentFatherName || '';
-    document.getElementById('parent-father-phone1').value = student.parentFatherMobile1 || '';
-    document.getElementById('parent-father-phone2').value = student.parentFatherMobile2 || '';
-    document.getElementById('parent-father-email').value = student.parentFatherEmail || '';
-    document.getElementById('parent-father-photo').value = student.parentFatherPhotoUrl || '';
-    document.getElementById('parent-mother-name').value = student.parentMotherName || '';
-    document.getElementById('parent-mother-phone1').value = student.parentMotherMobile1 || '';
-    document.getElementById('parent-mother-phone2').value = student.parentMotherMobile2 || '';
-    document.getElementById('parent-mother-email').value = student.parentMotherEmail || '';
-    document.getElementById('parent-mother-photo').value = student.parentMotherPhotoUrl || '';
+    setVal('parent-father-name', student.parentFatherName || '');
+    setVal('parent-father-phone1', student.parentFatherMobile1 || '');
+    setVal('parent-father-phone2', student.parentFatherMobile2 || '');
+    setVal('parent-father-email', student.parentFatherEmail || '');
+    setVal('parent-father-photo', student.parentFatherPhotoUrl || '');
+    setVal('parent-mother-name', student.parentMotherName || '');
+    setVal('parent-mother-phone1', student.parentMotherMobile1 || '');
+    setVal('parent-mother-phone2', student.parentMotherMobile2 || '');
+    setVal('parent-mother-email', student.parentMotherEmail || '');
+    setVal('parent-mother-photo', student.parentMotherPhotoUrl || '');
 
     // Local Guardian
-    document.getElementById('guardian-name').value = student.guardianName || '';
-    document.getElementById('guardian-relation').value = student.guardianRelationship || '';
-    document.getElementById('guardian-occupation').value = student.guardianOccupation || '';
-    document.getElementById('guardian-addr').value = student.guardianAddress || '';
-    document.getElementById('guardian-phone1').value = student.guardianMobile1 || '';
-    document.getElementById('guardian-phone2').value = student.guardianMobile2 || '';
+    setVal('guardian-name', student.guardianName || '');
+    setVal('guardian-relation', student.guardianRelationship || '');
+    setVal('guardian-occupation', student.guardianOccupation || '');
+    setVal('guardian-addr', student.guardianAddress || '');
+    setVal('guardian-phone1', student.guardianMobile1 || '');
+    setVal('guardian-phone2', student.guardianMobile2 || '');
 
     // Pre-uni
-    document.getElementById('pre-10-school').value = student.academics10thSchool || '';
-    document.getElementById('pre-10-year').value = student.academics10thYear || '';
-    document.getElementById('pre-10-board').value = student.academics10thBoard || '';
-    document.getElementById('pre-10-division').value = student.academics10thDivision || 'First';
-    document.getElementById('pre-10-marks').value = student.academics10thMarks || '';
-    document.getElementById('pre-12-school').value = student.academics12thSchool || '';
-    document.getElementById('pre-12-year').value = student.academics12thYear || '';
-    document.getElementById('pre-12-board').value = student.academics12thBoard || '';
-    document.getElementById('pre-12-division').value = student.academics12thDivision || 'First';
-    document.getElementById('pre-12-marks').value = student.academics12thMarks || '';
+    setVal('pre-10-school', student.academics10thSchool || '');
+    setVal('pre-10-year', student.academics10thYear || '');
+    setVal('pre-10-board', student.academics10thBoard || '');
+    setVal('pre-10-division', student.academics10thDivision || 'First');
+    setVal('pre-10-marks', student.academics10thMarks || '');
+    setVal('pre-12-school', student.academics12thSchool || '');
+    setVal('pre-12-year', student.academics12thYear || '');
+    setVal('pre-12-board', student.academics12thBoard || '');
+    setVal('pre-12-division', student.academics12thDivision || 'First');
+    setVal('pre-12-marks', student.academics12thMarks || '');
 
     // Transport/Hostel inputs
-    document.getElementById('student-route').value = student.transportRoute || 'None';
-    document.getElementById('student-hostel').value = student.hostelName || 'None';
-    document.getElementById('student-room').value = student.hostelRoomNumber || '';
+    setVal('student-route', student.transportRoute || 'None');
+    setVal('student-hostel', student.hostelName || 'None');
+    setVal('student-room', student.hostelRoomNumber || '');
 
     // Handle student type toggle (Hosteller/Day Scholar)
+    const typeEl = document.getElementById('student-type');
     const toggleInstitutionalInputs = () => {
-        const isHosteller = document.getElementById('student-type').value === 'Hosteller';
+        const isHosteller = (typeEl ? typeEl.value : 'Day Scholar') === 'Hosteller';
         const hostelGroup = document.getElementById('hostel-fields-group');
         const transportGroup = document.getElementById('transport-fields-group');
         if (hostelGroup) hostelGroup.style.display = isHosteller ? 'block' : 'none';
         if (transportGroup) transportGroup.style.display = isHosteller ? 'none' : 'block';
     };
-    document.getElementById('student-type').addEventListener('change', toggleInstitutionalInputs);
+    if (typeEl) {
+        typeEl.addEventListener('change', toggleInstitutionalInputs);
+    }
     toggleInstitutionalInputs();
 
     // Disable role fields (Course, Branch, Section, Semester) if NOT Admin or Mentor
     const inputsToLock = ['student-course', 'student-branch', 'student-semester', 'student-section', 'student-batch'];
     inputsToLock.forEach(id => {
-        document.getElementById(id).disabled = (currentRole === 'student');
+        const el = document.getElementById(id);
+        if (el) el.disabled = (currentRole === 'student');
     });
 
     // Handle Form Submit
     const form = document.getElementById('student-profile-form');
+    if (!form) return;
+
     form.onsubmit = async (e) => {
         e.preventDefault();
         
         const updatedData = {
-            name: document.getElementById('student-name').value,
-            email: document.getElementById('student-email').value,
-            specialization: document.getElementById('student-specialization').value,
-            category: document.getElementById('student-category').value,
-            dob: document.getElementById('student-dob').value,
-            bloodGroup: document.getElementById('student-blood').value,
-            identificationMark: document.getElementById('student-mark').value,
-            mobile1: document.getElementById('student-phone1').value,
-            mobile2: document.getElementById('student-phone2').value,
-            addressPresent: document.getElementById('student-addr-present').value,
-            addressPermanent: document.getElementById('student-addr-perm').value,
-            siblingsCount: document.getElementById('student-siblings').value,
-            photoUrl: document.getElementById('student-photo-url').value,
-            type: document.getElementById('student-type').value,
+            name: getVal('student-name', student.name || ''),
+            email: getVal('student-email', student.email || ''),
+            specialization: getVal('student-specialization', 'None'),
+            category: getVal('student-category', 'General'),
+            dob: getVal('student-dob', ''),
+            bloodGroup: getVal('student-blood', 'A+'),
+            identificationMark: getVal('student-mark', ''),
+            mobile1: getVal('student-phone1', ''),
+            mobile2: getVal('student-phone2', ''),
+            addressPresent: getVal('student-addr-present', ''),
+            addressPermanent: getVal('student-addr-perm', ''),
+            siblingsCount: getVal('student-siblings', '0'),
+            photoUrl: student.photoUrl || getVal('student-photo-url', ''),
+            type: getVal('student-type', 'Day Scholar'),
 
             // Parent details
-            parentFatherName: document.getElementById('parent-father-name').value,
-            parentFatherMobile1: document.getElementById('parent-father-phone1').value,
-            parentFatherMobile2: document.getElementById('parent-father-phone2').value,
-            parentFatherEmail: document.getElementById('parent-father-email').value,
-            parentFatherPhotoUrl: document.getElementById('parent-father-photo').value,
-            parentMotherName: document.getElementById('parent-mother-name').value,
-            parentMotherMobile1: document.getElementById('parent-mother-phone1').value,
-            parentMotherMobile2: document.getElementById('parent-mother-phone2').value,
-            parentMotherEmail: document.getElementById('parent-mother-email').value,
-            parentMotherPhotoUrl: document.getElementById('parent-mother-photo').value,
+            parentFatherName: getVal('parent-father-name', ''),
+            parentFatherMobile1: getVal('parent-father-phone1', ''),
+            parentFatherMobile2: getVal('parent-father-phone2', ''),
+            parentFatherEmail: getVal('parent-father-email', ''),
+            parentFatherPhotoUrl: getVal('parent-father-photo', student.parentFatherPhotoUrl || ''),
+            parentMotherName: getVal('parent-mother-name', ''),
+            parentMotherMobile1: getVal('parent-mother-phone1', ''),
+            parentMotherMobile2: getVal('parent-mother-phone2', ''),
+            parentMotherEmail: getVal('parent-mother-email', ''),
+            parentMotherPhotoUrl: getVal('parent-mother-photo', student.parentMotherPhotoUrl || ''),
 
             // Local Guardian
-            guardianName: document.getElementById('guardian-name').value,
-            guardianRelationship: document.getElementById('guardian-relation').value,
-            guardianOccupation: document.getElementById('guardian-occupation').value,
-            guardianAddress: document.getElementById('guardian-addr').value,
-            guardianMobile1: document.getElementById('guardian-phone1').value,
-            guardianMobile2: document.getElementById('guardian-phone2').value,
+            guardianName: getVal('guardian-name', ''),
+            guardianRelationship: getVal('guardian-relation', ''),
+            guardianOccupation: getVal('guardian-occupation', ''),
+            guardianAddress: getVal('guardian-addr', ''),
+            guardianMobile1: getVal('guardian-phone1', ''),
+            guardianMobile2: getVal('guardian-phone2', ''),
 
             // Pre-uni
-            academics10thSchool: document.getElementById('pre-10-school').value,
-            academics10thYear: document.getElementById('pre-10-year').value,
-            academics10thBoard: document.getElementById('pre-10-board').value,
-            academics10thDivision: document.getElementById('pre-10-division').value,
-            academics10thMarks: document.getElementById('pre-10-marks').value,
-            academics12thSchool: document.getElementById('pre-12-school').value,
-            academics12thYear: document.getElementById('pre-12-year').value,
-            academics12thBoard: document.getElementById('pre-12-board').value,
-            academics12thDivision: document.getElementById('pre-12-division').value,
-            academics12thMarks: document.getElementById('pre-12-marks').value,
+            academics10thSchool: getVal('pre-10-school', ''),
+            academics10thYear: getVal('pre-10-year', ''),
+            academics10thBoard: getVal('pre-10-board', ''),
+            academics10thDivision: getVal('pre-10-division', 'First'),
+            academics10thMarks: getVal('pre-10-marks', ''),
+            academics12thSchool: getVal('pre-12-school', ''),
+            academics12thYear: getVal('pre-12-year', ''),
+            academics12thBoard: getVal('pre-12-board', ''),
+            academics12thDivision: getVal('pre-12-division', 'First'),
+            academics12thMarks: getVal('pre-12-marks', ''),
 
             // Transport/Hostel
-            transportRoute: document.getElementById('student-route').value,
-            hostelName: document.getElementById('student-hostel').value,
-            hostelRoomNumber: document.getElementById('student-room').value,
+            transportRoute: getVal('student-route', 'None'),
+            hostelName: getVal('student-hostel', 'None'),
+            hostelRoomNumber: getVal('student-room', ''),
         };
 
         // If Admin or Mentor, allowed to change institutional fields
         if (currentRole !== 'student') {
-            updatedData.course = document.getElementById('student-course').value;
-            updatedData.branch = document.getElementById('student-branch').value;
-            updatedData.semester = document.getElementById('student-semester').value;
-            updatedData.section = document.getElementById('student-section').value;
-            updatedData.batch = document.getElementById('student-batch').value;
+            updatedData.course = getVal('student-course', student.course || 'B.Tech');
+            updatedData.branch = getVal('student-branch', student.branch || 'Computer Science & Engineering');
+            updatedData.semester = getVal('student-semester', student.semester || 'Sem 1');
+            updatedData.section = getVal('student-section', student.section || '');
+            updatedData.batch = getVal('student-batch', student.batch || '2023-2027');
         }
 
         const sid = student.rollNo || student.id || (currentUser && (currentUser.rollNo || currentUser.id));
