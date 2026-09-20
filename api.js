@@ -216,8 +216,11 @@
       }),
     completeStudentProfile: (data) =>
       request('/students/profile/complete', { method: 'PUT', body: data }),
+    updateStudentProfile: (data) =>
+      request('/students/profile/update', { method: 'PUT', body: data }),
     getStudentProfileMe: () => request('/students/profile/me'),
     getStudentProfileStatus: () => request('/students/profile/status'),
+    getStudentMe: () => request('/students/me'),
 
     // Section Allotment APIs (HOD / Admin)
     getSectionAllotmentList: (params = '') =>
