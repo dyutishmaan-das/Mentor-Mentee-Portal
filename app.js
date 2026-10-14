@@ -2000,21 +2000,6 @@ async function renderAdminDashboard() {
             : 'Institution Overview — Central Administration';
     }
 
-    const statStudentsLabel = document.getElementById('admin-stat-students-label');
-    if (statStudentsLabel) {
-        statStudentsLabel.textContent = isHod ? `${deptName} Students` : 'Total Mentees';
-    }
-
-    const statMentorsLabel = document.getElementById('admin-stat-mentors-label');
-    if (statMentorsLabel) {
-        statMentorsLabel.textContent = isHod ? `${deptName} Mentors` : 'Total Mentors';
-    }
-
-    const statSessionsLabel = document.getElementById('admin-stat-sessions-label');
-    if (statSessionsLabel) {
-        statSessionsLabel.textContent = isHod ? `${deptName} Sessions` : 'Sessions Conducted';
-    }
-
     const directoryTitleEl = document.getElementById('admin-student-directory-title');
     if (directoryTitleEl) {
         directoryTitleEl.textContent = isHod
@@ -2022,12 +2007,302 @@ async function renderAdminDashboard() {
             : 'All Enrolled Students List';
     }
 
-    const mentors = store.getMentors();
-    const sessions = store.getSessions();
+    // ---------------------------
+    // Fetch & render overview cards
+    // ---------------------------
+    const cardsGrid = document.getElementById('overview-cards-grid');
+    const entityPanel = document.getElementById('entity-list-panel');
+    const directoryPanel = document.getElementById('admin-student-directory-panel');
 
-    document.getElementById('admin-stat-mentors').textContent = mentors.length;
-    document.getElementById('admin-stat-sessions').textContent = sessions.length;
+    let statsData = null;
+    try {
+        const statsRes = await MentorAPI.systemStats();
+        statsData = statsRes.data;
+    } catch (err) {
+        console.warn('Failed to fetch system stats:', err.message);
+    }
 
+    // Card definitions
+    const cards = [];
+    if (statsData) {
+        const s = statsData.students || {};
+        const f = statsData.faculty || {};
+        cards.push(
+            { key: 'students',   icon: '\u{1F393}', value: s.total      || 0, label: isHod ? `${deptName} Students` : 'Total Students', css: 'oc-students',   entity: 'students',  filter: {} },
+            { key: 'active',     icon: '\u2705',     value: s.active     || 0, label: 'Active Students',         css: 'oc-active',     entity: 'students',  filter: { status: 'Active' } },
+            { key: 'inactive',   icon: '\u{1F534}',  value: s.inactive   || 0, label: 'Inactive Students',       css: 'oc-inactive',   entity: 'students',  filter: { status: 'Inactive' } },
+            { key: 'faculty',    icon: '\u{1F468}\u200D\u{1F3EB}', value: f.total || 0, label: isHod ? `${deptName} Faculty` : 'Total Faculty', css: 'oc-faculty', entity: 'faculty', filter: {} },
+        );
+        if (!isHod) {
+            cards.push(
+                { key: 'hods',     icon: '\u{1F3DB}\uFE0F', value: f.hods    || 0, label: 'HODs',              css: 'oc-hods',      entity: 'faculty', filter: { role: 'HOD' } },
+            );
+        }
+        cards.push(
+            { key: 'mentors',    icon: '\u{1F91D}', value: f.mentors     || 0, label: isHod ? `${deptName} Mentors` : 'Mentors', css: 'oc-mentors', entity: 'faculty', filter: { role: 'MENTOR' } },
+            { key: 'sessions',   icon: '\u{1F4CB}', value: statsData.sessions || 0, label: 'Sessions Conducted', css: 'oc-sessions',  entity: null, filter: {} },
+            { key: 'unallotted', icon: '\u{1F4CC}', value: s.unallotted  || 0, label: 'Unallotted Students',    css: 'oc-unallotted', entity: 'students', filter: { unallotted: true } },
+        );
+        if (statsData.pendingRegistrations > 0) {
+            cards.push(
+                { key: 'pending', icon: '\u{1F4E8}', value: statsData.pendingRegistrations, label: 'Pending Registrations', css: 'oc-pending', entity: null, filter: {} },
+            );
+        }
+        if (statsData.feedbacks > 0) {
+            cards.push(
+                { key: 'feedbacks', icon: '\u{1F4AC}', value: statsData.feedbacks, label: 'Feedbacks', css: 'oc-feedbacks', entity: null, filter: {} },
+            );
+        }
+    }
+
+    if (cardsGrid) {
+        if (cards.length === 0) {
+            // Fallback: show basic stats from store
+            const mentors = store.getMentors();
+            const sessions = store.getSessions();
+            const storeStudents = store.getStudents();
+            const activeCount = storeStudents.filter(s => s.status !== 'Inactive').length;
+            cardsGrid.innerHTML = `
+                <div class="overview-card oc-students" data-entity="students" data-filter="{}">
+                    <div class="overview-card-icon">\u{1F393}</div>
+                    <div class="overview-card-info">
+                        <div class="overview-card-value">${activeCount}</div>
+                        <div class="overview-card-label">${isHod ? deptName + ' Students' : 'Total Students'}</div>
+                    </div>
+                </div>
+                <div class="overview-card oc-mentors">
+                    <div class="overview-card-icon">\u{1F91D}</div>
+                    <div class="overview-card-info">
+                        <div class="overview-card-value">${mentors.length}</div>
+                        <div class="overview-card-label">${isHod ? deptName + ' Mentors' : 'Total Mentors'}</div>
+                    </div>
+                </div>
+                <div class="overview-card oc-sessions">
+                    <div class="overview-card-icon">\u{1F4CB}</div>
+                    <div class="overview-card-info">
+                        <div class="overview-card-value">${sessions.length}</div>
+                        <div class="overview-card-label">Sessions</div>
+                    </div>
+                </div>
+            `;
+        } else {
+            cardsGrid.innerHTML = cards.map(c => `
+                <div class="overview-card ${c.css}" 
+                     data-entity="${c.entity || ''}" 
+                     data-filter='${JSON.stringify(c.filter)}'
+                     data-key="${c.key}"
+                     ${c.entity ? 'style="cursor:pointer;"' : 'style="cursor:default;"'}>
+                    <div class="overview-card-icon">${c.icon}</div>
+                    <div class="overview-card-info">
+                        <div class="overview-card-value">${c.value}</div>
+                        <div class="overview-card-label">${c.label}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Attach click handlers to entity-browsable cards
+        cardsGrid.querySelectorAll('.overview-card[data-entity]').forEach(card => {
+            const entity = card.dataset.entity;
+            if (!entity) return;
+            card.onclick = () => openEntityPanel(entity, JSON.parse(card.dataset.filter || '{}'), card);
+        });
+    }
+
+    // ---------------------------
+    // Entity panel logic
+    // ---------------------------
+    async function openEntityPanel(entityType, initialFilter, clickedCard) {
+        if (!entityPanel) return;
+        // Highlight active card
+        cardsGrid.querySelectorAll('.overview-card').forEach(c => c.classList.remove('active-card'));
+        if (clickedCard) clickedCard.classList.add('active-card');
+
+        entityPanel.style.display = 'block';
+        if (directoryPanel) directoryPanel.style.display = 'none';
+
+        const titleEl = document.getElementById('entity-panel-title');
+        const badgeEl = document.getElementById('entity-count-badge');
+        const filtersBar = document.getElementById('entity-filters-bar');
+        const thead = document.getElementById('entity-table-head');
+        const tbody = document.getElementById('entity-table-body');
+
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:24px; color:var(--text-muted);">Loading...</td></tr>';
+
+        if (entityType === 'students') {
+            titleEl.textContent = initialFilter.status ? `${initialFilter.status} Students` : (initialFilter.unallotted ? 'Unallotted Students' : 'All Students');
+
+            // Build filter bar
+            filtersBar.innerHTML = `
+                <select id="ef-status" class="form-control" style="width:130px;">
+                    <option value="">All Statuses</option>
+                    <option value="Active" ${initialFilter.status === 'Active' ? 'selected' : ''}>Active</option>
+                    <option value="Inactive" ${initialFilter.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                </select>
+                <div class="input-wrapper" style="min-width:180px; flex:1; max-width:260px;">
+                    <input type="text" id="ef-search" class="form-control" placeholder="Search name, roll, email...">
+                </div>
+            `;
+
+            thead.innerHTML = `<tr>
+                <th>Roll No</th><th>Name</th>
+                <th class="hide-mobile">Department</th>
+                <th class="hide-mobile">Semester</th>
+                <th>Section</th><th>Status</th>
+            </tr>`;
+
+            const loadEntityStudents = async () => {
+                const params = new URLSearchParams();
+                const statusVal = document.getElementById('ef-status')?.value || '';
+                const searchVal = document.getElementById('ef-search')?.value?.trim() || '';
+                if (statusVal) params.append('status', statusVal);
+                if (searchVal) params.append('search', searchVal);
+
+                let students = [];
+                try {
+                    const res = await MentorAPI.students(params.toString());
+                    students = res.data || [];
+                } catch (e) {
+                    students = store.getStudents();
+                    if (statusVal) students = students.filter(s => s.status === statusVal);
+                }
+
+                // Apply unallotted filter client-side
+                if (initialFilter.unallotted) {
+                    students = students.filter(s => !s.section);
+                }
+
+                badgeEl.textContent = `${students.length} Student${students.length !== 1 ? 's' : ''}`;
+
+                if (students.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-muted);">No students found.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = students.map(s => {
+                    const inactive = s.status === 'Inactive';
+                    const statusBadge = inactive
+                        ? '<span class="badge-tag" style="background:rgba(239,68,68,0.15);color:#dc2626;font-weight:600;">Inactive</span>'
+                        : '<span class="badge-tag" style="background:rgba(16,185,129,0.15);color:#059669;font-weight:600;">Active</span>';
+                    const secBadge = s.section
+                        ? `<span class="badge-tag" style="background:#e0f2fe;color:#0369a1;font-weight:600;">Sec ${s.section}</span>`
+                        : '<span class="badge-tag" style="background:#fef3c7;color:#92400e;">Unallotted</span>';
+                    return `<tr style="${inactive ? 'opacity:0.6;' : ''}">
+                        <td><strong style="color:var(--primary-light);font-family:monospace;font-size:13px;">${s.rollNo || s.id}</strong></td>
+                        <td><strong>${s.name}</strong><div style="font-size:11px;color:var(--text-muted);">${s.email || ''}</div></td>
+                        <td class="hide-mobile">${s.department || s.branch || ''}</td>
+                        <td class="hide-mobile">${s.semester || ''}</td>
+                        <td>${secBadge}</td>
+                        <td>${statusBadge}</td>
+                    </tr>`;
+                }).join('');
+            };
+
+            await loadEntityStudents();
+
+            // Attach filter listeners
+            const efStatus = document.getElementById('ef-status');
+            const efSearch = document.getElementById('ef-search');
+            if (efStatus) efStatus.onchange = loadEntityStudents;
+            if (efSearch) {
+                let deb;
+                efSearch.oninput = () => { clearTimeout(deb); deb = setTimeout(loadEntityStudents, 300); };
+            }
+
+        } else if (entityType === 'faculty') {
+            const roleLabel = initialFilter.role || 'All';
+            titleEl.textContent = initialFilter.role ? `${initialFilter.role === 'HOD' ? 'HODs' : initialFilter.role === 'MENTOR' ? 'Mentors' : initialFilter.role.replace('_', ' ')}` : 'All Faculty';
+
+            filtersBar.innerHTML = `
+                <select id="ef-role" class="form-control" style="width:160px;">
+                    <option value="">All Roles</option>
+                    <option value="HOD" ${initialFilter.role === 'HOD' ? 'selected' : ''}>HOD</option>
+                    <option value="MENTOR" ${initialFilter.role === 'MENTOR' ? 'selected' : ''}>Mentor</option>
+                    <option value="ACADEMIC_FACULTY" ${initialFilter.role === 'ACADEMIC_FACULTY' ? 'selected' : ''}>Academic Faculty</option>
+                    <option value="OTHER_FACULTY" ${initialFilter.role === 'OTHER_FACULTY' ? 'selected' : ''}>Other Faculty</option>
+                </select>
+                <div class="input-wrapper" style="min-width:180px; flex:1; max-width:260px;">
+                    <input type="text" id="ef-search" class="form-control" placeholder="Search name, email...">
+                </div>
+            `;
+
+            thead.innerHTML = `<tr>
+                <th>Name</th>
+                <th class="hide-mobile">Email</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th class="hide-mobile">Designation</th>
+            </tr>`;
+
+            const loadEntityFaculty = async () => {
+                const params = new URLSearchParams();
+                const roleVal = document.getElementById('ef-role')?.value || '';
+                const searchVal = document.getElementById('ef-search')?.value?.trim() || '';
+                if (roleVal) params.append('role', roleVal);
+
+                let faculty = [];
+                try {
+                    const res = await MentorAPI.faculty(params.toString());
+                    faculty = res.data || [];
+                } catch (e) {
+                    faculty = [];
+                }
+
+                // Client-side search
+                if (searchVal) {
+                    const q = searchVal.toLowerCase();
+                    faculty = faculty.filter(f => (f.name && f.name.toLowerCase().includes(q)) || (f.email && f.email.toLowerCase().includes(q)));
+                }
+
+                badgeEl.textContent = `${faculty.length} Member${faculty.length !== 1 ? 's' : ''}`;
+
+                if (faculty.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">No faculty found.</td></tr>';
+                    return;
+                }
+
+                const roleBadge = (role) => {
+                    const colors = { HOD: '#0891b2', MENTOR: '#f59e0b', ACADEMIC_FACULTY: '#8b5cf6', OTHER_FACULTY: '#64748b', ADMIN: '#ef4444' };
+                    const c = colors[role] || '#64748b';
+                    const label = role === 'ACADEMIC_FACULTY' ? 'Academic' : role === 'OTHER_FACULTY' ? 'Other' : role;
+                    return `<span class="badge-tag" style="background:${c}15;color:${c};font-weight:600;">${label}</span>`;
+                };
+
+                tbody.innerHTML = faculty.map(f => `<tr>
+                    <td><strong>${f.name}</strong></td>
+                    <td class="hide-mobile" style="font-size:12px;color:var(--text-muted);">${f.email || ''}</td>
+                    <td>${roleBadge(f.role)}</td>
+                    <td style="font-size:13px;">${f.department || '-'}</td>
+                    <td class="hide-mobile" style="font-size:13px;">${f.designation || '-'}</td>
+                </tr>`).join('');
+            };
+
+            await loadEntityFaculty();
+
+            const efRole = document.getElementById('ef-role');
+            const efSearch = document.getElementById('ef-search');
+            if (efRole) efRole.onchange = loadEntityFaculty;
+            if (efSearch) {
+                let deb;
+                efSearch.oninput = () => { clearTimeout(deb); deb = setTimeout(loadEntityFaculty, 300); };
+            }
+        }
+    }
+
+    // Back button: close entity panel, show directory
+    const backBtn = document.getElementById('btn-entity-back');
+    if (backBtn && !backBtn.dataset.listenerAttached) {
+        backBtn.dataset.listenerAttached = 'true';
+        backBtn.onclick = () => {
+            if (entityPanel) entityPanel.style.display = 'none';
+            if (directoryPanel) directoryPanel.style.display = 'block';
+            if (cardsGrid) cardsGrid.querySelectorAll('.overview-card').forEach(c => c.classList.remove('active-card'));
+        };
+    }
+
+    // ---------------------------
+    // Student directory table (original functionality preserved)
+    // ---------------------------
     async function loadAdminStudentList() {
         if (!tableBody) return;
         tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 24px;">Loading enrolled students…</td></tr>`;

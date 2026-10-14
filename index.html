@@ -1081,39 +1081,56 @@
                     <h2 id="admin-dashboard-title" class="section-title">Admin Management Portal</h2>
                 </div>
 
-                <div class="analytics-panel">
-                    <div class="analytics-card">
-                        <div id="admin-stat-students" class="analytics-value">0</div>
-                        <div id="admin-stat-students-label" class="analytics-label">Total Mentees</div>
+                <!-- Overview Cards Grid -->
+                <div id="overview-cards-grid" class="overview-cards-grid">
+                    <!-- Cards injected dynamically by renderAdminDashboard() -->
+                </div>
+
+                <!-- Entity List Panel (shown when a card is clicked) -->
+                <div id="entity-list-panel" class="card" style="display: none;">
+                    <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <button type="button" id="btn-entity-back" class="btn btn-secondary" style="padding: 0.35rem 0.7rem; font-size: 13px;" title="Back to Overview">
+                                &larr; Overview
+                            </button>
+                            <span id="entity-panel-title" style="font-weight: 700;">Entities</span>
+                            <span id="entity-count-badge" class="badge-tag" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-weight: 600;">0</span>
+                        </div>
+                        <div id="entity-filters-bar" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <!-- Dynamic filter controls injected here -->
+                        </div>
                     </div>
-                    <div class="analytics-card">
-                        <div id="admin-stat-mentors" class="analytics-value">0</div>
-                        <div id="admin-stat-mentors-label" class="analytics-label">Total Mentors</div>
-                    </div>
-                    <div class="analytics-card">
-                        <div id="admin-stat-sessions" class="analytics-value">0</div>
-                        <div id="admin-stat-sessions-label" class="analytics-label">Sessions Conducted</div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead id="entity-table-head">
+                                <!-- Dynamic -->
+                            </thead>
+                            <tbody id="entity-table-body">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div class="card">
+                <!-- Student Directory (legacy, still used for full student table with actions) -->
+                <div id="admin-student-directory-panel" class="card">
                     <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                             <span id="admin-student-directory-title">All Enrolled Students List</span>
                             <span id="admin-student-count-badge" class="badge-tag" style="background: rgba(37, 99, 235, 0.1); color: #2563eb; font-weight: 600;">0 Students</span>
                         </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                             <select id="admin-student-filter-status" class="form-control" style="width: 140px; padding: 0.4rem 0.6rem; font-size: 13px;">
                                 <option value="">All Statuses</option>
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive / Deactivated</option>
                             </select>
-                            <div class="input-wrapper" style="width: 260px;">
+                            <div class="input-wrapper" style="min-width: 200px; flex: 1; max-width: 280px;">
                                 <input type="text" id="admin-student-search" class="form-control"
-                                    placeholder="Search student name, roll, email..." style="padding: 0.45rem 0.85rem; font-size: 13px;">
+                                    placeholder="Search name, roll, email..." style="padding: 0.45rem 0.85rem; font-size: 13px;">
                             </div>
                             <button type="button" id="btn-refresh-admin-students" class="btn btn-secondary" style="padding: 0.45rem 0.85rem; font-size: 13px;">
-                                🔄 Refresh
+                                Refresh
                             </button>
                         </div>
                     </div>
@@ -1123,11 +1140,11 @@
                                 <tr>
                                     <th>Roll No</th>
                                     <th>Name</th>
-                                    <th>Course & Branch</th>
-                                    <th>Semester</th>
+                                    <th class="hide-mobile">Course & Branch</th>
+                                    <th class="hide-mobile">Semester</th>
                                     <th>Section</th>
                                     <th>Status</th>
-                                    <th>CGPA</th>
+                                    <th class="hide-mobile">CGPA</th>
                                     <th style="text-align: right;">Actions</th>
                                 </tr>
                             </thead>
