@@ -1389,40 +1389,5 @@ select.form-control {
     letter-spacing: 0.02em;
 }
 
-/* ============================================
-   CONNECTION STATUS INDICATOR (header badge)
-   ============================================ */
-.conn-indicator {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 0.35rem 0.75rem;
-    border-radius: var(--radius-full);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #e2e8f0;
-    cursor: default;
-    user-select: none;
-}
-
-#conn-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #f59e0b; /* Default: amber (connecting) */
-    display: inline-block;
-    transition: background 0.4s ease;
-    position: relative;
-}
-
-#conn-dot::after {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    background: inherit;
-    animation: pulse-ring 1.8s ease-out infinite;
-}
+/* End of file */
 
