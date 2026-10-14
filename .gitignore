@@ -38,3 +38,8 @@ uploads/
 */*/uploads/
 */*/*/uploads/
 
+# Google Service Account Keys (NEVER commit)
+mentor-mentee-portal-*.json
+*.credentials.json
+service-account*.json
+

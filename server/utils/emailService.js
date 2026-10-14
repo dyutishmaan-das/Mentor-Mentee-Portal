@@ -10,6 +10,20 @@ import nodemailer from 'nodemailer';
  * - Robust error classification (detects free Resend sandbox destination restrictions)
  */
 
+/**
+ * Resolve the public-facing client URL for use in emails.
+ * Priority: CLIENT_URL (if non-localhost) > VERCEL_URL > CLIENT_URL fallback
+ */
+function getClientUrl() {
+    if (process.env.CLIENT_URL && !process.env.CLIENT_URL.includes('localhost')) {
+        return process.env.CLIENT_URL.replace(/\/+$/, '');
+    }
+    if (process.env.VERCEL_URL) {
+        return `https://${process.env.VERCEL_URL}`;
+    }
+    return process.env.CLIENT_URL || 'http://localhost:5000';
+}
+
 // Initialize Resend lazily to ensure environment variables are loaded
 let resend = null;
 
@@ -310,7 +324,7 @@ After verification, your registration will be reviewed by the admin.
  */
 export async function sendPasswordEmail(email, password, studentName, rollNo) {
     try {
-        const loginUrl = process.env.CLIENT_URL || 'http://localhost:5000';
+        const loginUrl = getClientUrl();
         
         // HTML email template
         const htmlContent = `
@@ -535,7 +549,7 @@ This is an automated email. Please do not reply.
  */
 export async function sendPasswordResetEmail(email, resetToken, userName) {
     try {
-        const resetUrl = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
+        const resetUrl = `${getClientUrl()}/reset-password?token=${resetToken}`;
         
         const htmlContent = `
 <!DOCTYPE html>

@@ -4,6 +4,17 @@ import crypto from 'crypto';
  * Utility functions for student registration
  */
 
+/** Resolve public-facing client URL for SMS/messages. */
+function getClientUrl() {
+    if (process.env.CLIENT_URL && !process.env.CLIENT_URL.includes('localhost')) {
+        return process.env.CLIENT_URL.replace(/\/+$/, '');
+    }
+    if (process.env.VERCEL_URL) {
+        return `https://${process.env.VERCEL_URL}`;
+    }
+    return process.env.CLIENT_URL || 'http://localhost:5000';
+}
+
 /**
  * Generate a secure 8-character temporary password
  * Contains: uppercase, lowercase, numbers, and symbols
@@ -47,7 +58,7 @@ export async function sendPasswordSMS(mobile, password, studentName) {
     // For now, we'll simulate SMS sending
     // In production, integrate with SMS gateway like Twilio, MSG91, etc.
     
-    const message = `Hello ${studentName}, Welcome to Mentor-Mentee Portal! Your temporary password is: ${password}. Please login at ${process.env.CLIENT_URL} and change your password immediately. This password will expire in 24 hours.`;
+    const message = `Hello ${studentName}, Welcome to Mentor-Mentee Portal! Your temporary password is: ${password}. Please login at ${getClientUrl()} and change your password immediately. This password will expire in 24 hours.`;
     
     console.log('=== SMS SENT ===');
     console.log('To:', mobile);

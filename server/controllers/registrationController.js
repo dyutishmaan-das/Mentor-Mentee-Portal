@@ -9,6 +9,29 @@ import { generateTempPassword } from '../utils/registrationUtils.js';
 import { sendPasswordEmail, sendOtpEmail, sendRegistrationInviteEmail } from '../utils/emailService.js';
 
 /**
+ * Resolve the public-facing client URL.
+ * Priority: CLIENT_URL env var > VERCEL_URL > localhost fallback
+ */
+function getClientUrl(req) {
+    if (process.env.CLIENT_URL && !process.env.CLIENT_URL.includes('localhost')) {
+        return process.env.CLIENT_URL.replace(/\/+$/, '');
+    }
+    if (process.env.VERCEL_URL) {
+        return `https://${process.env.VERCEL_URL}`;
+    }
+    if (req && req.headers && req.headers.origin) {
+        return req.headers.origin;
+    }
+    if (req && req.headers && req.headers.referer) {
+        try {
+            const u = new URL(req.headers.referer);
+            return u.origin;
+        } catch (_) {}
+    }
+    return process.env.CLIENT_URL || 'http://localhost:5000';
+}
+
+/**
  * ============================================
  * NEW REGISTRATION FLOW WITH OTP & ADMIN APPROVAL
  * ============================================
@@ -91,7 +114,7 @@ export const generateBatchEmailLinks = asyncHandler(async (req, res) => {
             isActive: true,
         });
 
-        const registrationUrl = `${process.env.CLIENT_URL}/register.html?token=${tokenDoc.token}&email=${encodeURIComponent(entry.email)}`;
+        const registrationUrl = `${getClientUrl(req)}/register.html?token=${tokenDoc.token}&email=${encodeURIComponent(entry.email)}`;
 
         let emailSentStatus = false;
         let emailError = null;
@@ -166,7 +189,7 @@ export const generateRegistrationLink = asyncHandler(async (req, res) => {
         createdBy: req.user._id,
     });
 
-    const registrationUrl = `${process.env.CLIENT_URL}/register.html?token=${token.token}${assignedEmail ? `&email=${encodeURIComponent(assignedEmail)}` : ''}`;
+    const registrationUrl = `${getClientUrl(req)}/register.html?token=${token.token}${assignedEmail ? `&email=${encodeURIComponent(assignedEmail)}` : ''}`;
 
     res.status(201).json({
         success: true,
