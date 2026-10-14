@@ -8,27 +8,69 @@ import Student from '../models/Student.js';
 import User from '../models/User.js';
 import Session from '../models/Session.js';
 import Feedback from '../models/Feedback.js';
+import PendingRegistration from '../models/PendingRegistration.js';
 
 /**
- * Get system statistics
+ * Get system statistics (rich breakdown)
  * GET /api/system/stats
  */
 export const getSystemStats = asyncHandler(async (req, res) => {
+    const isHod = req.user.role === 'HOD';
+    const hodDept = req.user.department || '';
+
+    // Build department filter for HOD scoping
+    const studentDeptFilter = isHod ? { department: hodDept } : {};
+    const userDeptFilter = isHod ? { department: hodDept } : {};
+
     const [
         totalStudents,
-        totalFaculty,
+        activeStudents,
+        inactiveStudents,
+        profileCompletedStudents,
+        profilePendingStudents,
+        unallottedStudents,
+        totalHods,
         totalMentors,
+        totalAcademicFaculty,
+        totalOtherFaculty,
         totalSessions,
         totalFeedbacks,
-        activeStudents,
+        pendingRegistrations,
+        studentsByDepartment,
+        studentsBySection,
+        studentsBySemester,
     ] = await Promise.all([
-        Student.countDocuments(),
-        User.countDocuments({ role: { $ne: 'MENTEE' } }),
-        User.countDocuments({ role: 'MENTOR' }),
+        Student.countDocuments(studentDeptFilter),
+        Student.countDocuments({ ...studentDeptFilter, status: 'Active' }),
+        Student.countDocuments({ ...studentDeptFilter, status: 'Inactive' }),
+        Student.countDocuments({ ...studentDeptFilter, profileCompleted: true }),
+        Student.countDocuments({ ...studentDeptFilter, profileCompleted: { $ne: true } }),
+        Student.countDocuments({ ...studentDeptFilter, $or: [{ section: '' }, { section: { $exists: false } }] }),
+        User.countDocuments({ ...userDeptFilter, role: 'HOD' }),
+        User.countDocuments({ ...userDeptFilter, role: 'MENTOR' }),
+        User.countDocuments({ ...userDeptFilter, role: 'ACADEMIC_FACULTY' }),
+        User.countDocuments({ ...userDeptFilter, role: 'OTHER_FACULTY' }),
         Session.countDocuments(),
         Feedback.countDocuments(),
-        Student.countDocuments({ status: 'Active' }),
+        PendingRegistration.countDocuments({ status: 'PENDING_APPROVAL' }),
+        Student.aggregate([
+            ...(isHod ? [{ $match: { department: hodDept } }] : []),
+            { $group: { _id: '$department', count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+        ]),
+        Student.aggregate([
+            ...(isHod ? [{ $match: { department: hodDept } }] : []),
+            { $group: { _id: { $ifNull: ['$section', 'Unallotted'] }, count: { $sum: 1 } } },
+            { $sort: { _id: 1 } },
+        ]),
+        Student.aggregate([
+            ...(isHod ? [{ $match: { department: hodDept } }] : []),
+            { $group: { _id: '$semester', count: { $sum: 1 } } },
+            { $sort: { _id: 1 } },
+        ]),
     ]);
+
+    const totalFaculty = totalHods + totalMentors + totalAcademicFaculty + totalOtherFaculty;
 
     res.json({
         success: true,
@@ -36,13 +78,26 @@ export const getSystemStats = asyncHandler(async (req, res) => {
             students: {
                 total: totalStudents,
                 active: activeStudents,
+                inactive: inactiveStudents,
+                profileCompleted: profileCompletedStudents,
+                profilePending: profilePendingStudents,
+                unallotted: unallottedStudents,
             },
             faculty: {
                 total: totalFaculty,
+                hods: totalHods,
                 mentors: totalMentors,
+                academicFaculty: totalAcademicFaculty,
+                otherFaculty: totalOtherFaculty,
             },
             sessions: totalSessions,
             feedbacks: totalFeedbacks,
+            pendingRegistrations,
+            breakdowns: {
+                studentsByDepartment,
+                studentsBySection,
+                studentsBySemester,
+            },
         },
     });
 });

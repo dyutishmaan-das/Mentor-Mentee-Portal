@@ -233,6 +233,10 @@
 
     getFile: (folder, filename) => `${API_BASE}/resources/file/${folder}/${filename}`,
 
+    // System Stats & Faculty APIs
+    systemStats: () => request('/system/stats'),
+    faculty: (params = '') => request(`/faculty${params ? `?${params}` : ''}`),
+
     isAuthenticated: () => Boolean(getToken()),
     setApiBaseUrl: (url) => {
       if (url) {
