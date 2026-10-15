@@ -3828,6 +3828,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Init Login Form Role switching and credentials check
     initLogin();
 
+    // Init Mobile Drawer Toggle
+    const mobileToggle = document.getElementById('mobile-menu-toggle');
+    const sidebarEl = document.querySelector('.sidebar');
+    if (mobileToggle && sidebarEl) {
+        mobileToggle.onclick = (e) => {
+            e.stopPropagation();
+            sidebarEl.classList.toggle('mobile-open');
+        };
+        // Close sidebar when clicking a nav link on mobile
+        sidebarEl.querySelectorAll('.nav-link').forEach(link => {
+            link.onclick = () => {
+                sidebarEl.classList.remove('mobile-open');
+            };
+        });
+        // Close sidebar when clicking outside
+        document.addEventListener('click', (e) => {
+            if (sidebarEl.classList.contains('mobile-open') && !sidebarEl.contains(e.target) && e.target !== mobileToggle) {
+                sidebarEl.classList.remove('mobile-open');
+            }
+        });
+    }
+
     // Auto-restore authenticated user session on page load / reload
     if (window.MentorAPI && MentorAPI.isAuthenticated()) {
         try {
